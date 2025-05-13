@@ -31,7 +31,10 @@ interface LoginResponse {
   name: string;
   role: "admin" | "teacher" | "student";
   email: string;
-  createdAt: string; // ISO date string
+  createdAt: string;
+  status: "approved" | "pending" | "rejected" | "suspended";
+  profilePic?: string;
+  bio?: string;
 }
 
 // Response type for Logout endpoint
@@ -69,7 +72,7 @@ interface GetProfileResponse {
   school?: string; // Student-specific
   department?: string; // Student-specific
   studentID?: string; // Student-specific
-  createdAt?: string; // ISO date string
+  createdAt?: string;
 }
 
 // Request payload for Register

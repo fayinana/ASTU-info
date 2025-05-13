@@ -1,19 +1,19 @@
 import { useState, createContext, useContext, type ReactNode } from "react";
+import type { LoginResponse } from "../types/auth";
 // import { useToast } from "@/hooks/use-toast";
-import { type User } from "./../types/user";
 
 interface AuthContextType {
-  user: User | null;
+  user: LoginResponse | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  setUser: (user: User | null) => void;
+  setUser: (user: LoginResponse | null) => void;
   checkRole: (role: string | string[]) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(() =>
+  const [user, setUser] = useState<LoginResponse | null>(() =>
     localStorage.getItem("user")
       ? JSON.parse(localStorage.getItem("user")!)
       : null

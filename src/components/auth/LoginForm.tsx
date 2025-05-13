@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useLogin } from "@/hooks/useAuth";
 import { LoginFormValues, loginSchema } from "@/lib/zodSchemas";
-import { UserLogin } from "@/types/auth";
+import { LoginRequest } from "@/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -32,8 +32,11 @@ export const LoginForm = () => {
     },
   });
 
-  const handleSubmit = (data: UserLogin) => {
+  const handleSubmit = (data: LoginRequest) => {
     login(data);
+    console.log("====================================");
+    console.log(error);
+    console.log("====================================");
   };
 
   return (
