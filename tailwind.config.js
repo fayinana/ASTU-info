@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import type { Config } from "tailwindcss";
+import { Config } from "tailwindcss";
 
 export default {
 	darkMode: ["class"],
