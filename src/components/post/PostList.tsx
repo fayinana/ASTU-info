@@ -1,6 +1,5 @@
-
 import { useState, useEffect, useMemo } from "react";
-import { useAuth } from "@/context/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import PostCard from "@/components/post/PostCard";
@@ -8,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Search, PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { usePosts } from "@/hooks/usePosts"; 
+import { usePosts } from "@/hooks/usePosts";
 import { PostListSkeleton } from "@/components/skeletons/PostListSkeleton";
 import { Post } from "@/types/post";
 
@@ -37,29 +36,29 @@ export const PostList = ({
   // Memoize filters to prevent unnecessary rerenders
   const initialFilters = useMemo(() => {
     const filters: Record<string, any> = {};
-    
+
     // Set type filter if not 'all'
     if (activeTab !== "all") {
       filters.type = activeTab;
     }
-    
+
     // Set authorId filter if authorOnly is true
     if (authorOnly && user?._id) {
       filters.authorId = user._id;
     }
-    
+
     return filters;
   }, [activeTab, authorOnly, user?._id]);
 
   // Fetch posts based on filters
-  const { 
+  const {
     posts,
     isLoading,
     error: isError,
     setSearch,
-    setFilter
+    setFilter,
   } = usePosts({
-    initialFilters
+    initialFilters,
   });
 
   // Handle search input changes with debounce
@@ -67,14 +66,14 @@ export const PostList = ({
     const timer = setTimeout(() => {
       setSearch(localSearch || null);
     }, 300);
-    
+
     return () => clearTimeout(timer);
   }, [localSearch, setSearch]);
 
   // Handle tab changes
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    
+
     // Update type filter based on tab
     if (value !== "all") {
       setFilter("type", value);
@@ -126,7 +125,9 @@ export const PostList = ({
       ) : isError ? (
         <Card>
           <CardContent className="p-8 text-center">
-            <p className="text-muted-foreground mb-4">Failed to load posts. Please try again.</p>
+            <p className="text-muted-foreground mb-4">
+              Failed to load posts. Please try again.
+            </p>
             <Button variant="outline" onClick={() => window.location.reload()}>
               Refresh
             </Button>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,12 +10,12 @@ import { User } from "@/types/user";
 import { formatRelativeTime } from "@/lib/utils";
 import { z } from "zod";
 import { Edit, Trash } from "lucide-react";
-import { useAuth } from "@/context/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { adaptApiUserToAppUser } from "@/lib/typeAdapters";
 
 // Form schema for comments
 const commentSchema = z.object({
-  content: z.string().min(1, "Comment cannot be empty")
+  content: z.string().min(1, "Comment cannot be empty"),
 });
 
 type CommentFormValues = z.infer<typeof commentSchema>;
@@ -88,11 +87,10 @@ export const CommentSection = ({
 
   const canEditComment = (comment: Comment) => {
     if (!user) return false;
-    
-    const commentAuthorId = typeof comment.author === 'string' 
-      ? comment.author 
-      : comment.author._id;
-      
+
+    const commentAuthorId =
+      typeof comment.author === "string" ? comment.author : comment.author._id;
+
     return commentAuthorId === user._id || user.role === "admin";
   };
 
@@ -139,10 +137,17 @@ export const CommentSection = ({
         ) : (
           sortedComments.map((comment) => {
             // Get the appropriate user object for the comment author
-            const commentUser = typeof comment.author === 'string'
-              ? { _id: comment.author, name: "Unknown User", email: comment.email || "", role: "student", isApproved: true } as User
-              : comment.author;
-              
+            const commentUser =
+              typeof comment.author === "string"
+                ? ({
+                    _id: comment.author,
+                    name: "Unknown User",
+                    email: comment.email || "",
+                    role: "student",
+                    isApproved: true,
+                  } as User)
+                : comment.author;
+
             return (
               <div key={comment._id} className="flex space-x-2">
                 <Avatar user={commentUser} size="sm" />
@@ -150,8 +155,8 @@ export const CommentSection = ({
                   <div className="bg-muted p-3 rounded-lg">
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-sm">
-                        {typeof comment.author === 'string' 
-                          ? comment.email?.split('@')[0] || "User" 
+                        {typeof comment.author === "string"
+                          ? comment.email?.split("@")[0] || "User"
                           : comment.author.name}
                       </span>
                       <span className="text-xs text-muted-foreground">
@@ -199,28 +204,29 @@ export const CommentSection = ({
                     )}
                   </div>
 
-                  {canEditComment(comment) && editingCommentId !== comment._id && (
-                    <div className="flex items-center space-x-2 mt-1 ml-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground"
-                        onClick={() => startEditing(comment)}
-                      >
-                        <Edit className="h-3 w-3 mr-1" />
-                        Edit
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-auto p-0 text-xs text-muted-foreground hover:text-destructive"
-                        onClick={() => handleDeleteComment(comment._id || "")}
-                      >
-                        <Trash className="h-3 w-3 mr-1" />
-                        Delete
-                      </Button>
-                    </div>
-                  )}
+                  {canEditComment(comment) &&
+                    editingCommentId !== comment._id && (
+                      <div className="flex items-center space-x-2 mt-1 ml-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground"
+                          onClick={() => startEditing(comment)}
+                        >
+                          <Edit className="h-3 w-3 mr-1" />
+                          Edit
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-auto p-0 text-xs text-muted-foreground hover:text-destructive"
+                          onClick={() => handleDeleteComment(comment._id || "")}
+                        >
+                          <Trash className="h-3 w-3 mr-1" />
+                          Delete
+                        </Button>
+                      </div>
+                    )}
                 </div>
               </div>
             );

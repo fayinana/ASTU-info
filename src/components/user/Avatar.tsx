@@ -7,7 +7,7 @@ import { User } from "@/types/user";
 import { getInitials } from "@/lib/utils";
 
 interface AvatarProps {
-  user: User;
+  user: Partial<User>;
   size?: "sm" | "md" | "lg" | "xl";
   className?: string;
 }

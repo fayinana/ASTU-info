@@ -10,7 +10,7 @@ import type {
 
 export const fetchPosts = async (query: GetPostsQuery) => {
   try {
-    const response = await apiClient.get<GetPostsResponse>("/posts", query);
+    const response = await apiClient.get<GetPostsResponse>("/post", query);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -19,7 +19,7 @@ export const fetchPosts = async (query: GetPostsQuery) => {
 
 export const fetchPost = async (id: string) => {
   try {
-    const response = await apiClient.get<GetPostResponse>(`/posts/${id}`);
+    const response = await apiClient.get<GetPostResponse>(`/post/${id}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -34,7 +34,7 @@ export const createPost = async (data: CreatePostRequest) => {
     if (data.files) formData.append("files", data.files);
 
     const response = await apiClient.post<CreatePostResponse>(
-      "/posts",
+      "/post",
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -48,7 +48,7 @@ export const createPost = async (data: CreatePostRequest) => {
 
 export const deletePost = async (id: string) => {
   try {
-    const response = await apiClient.delete<DeletePostResponse>(`/posts/${id}`);
+    const response = await apiClient.delete<DeletePostResponse>(`/post/${id}`);
     return response.data;
   } catch (error) {
     throw handleApiError(error);

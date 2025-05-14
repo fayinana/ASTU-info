@@ -1,12 +1,11 @@
-
 import { useState, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { MobileNav } from "./MobileNav";
 import { Breadcrumb } from "./Breadcrumb";
-import { adaptApiUserToAppUser } from "@/lib/typeAdapters";
+// import { adaptApiUserToAppUser } from "@/lib/typeAdapters";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -17,53 +16,55 @@ interface AppLayoutProps {
 }
 
 // Use memo to prevent unnecessary rerenders
-const AppLayoutContent = memo(({ 
-  children, 
-  title, 
-  breadcrumbs,
-  user,
-  isMobileNavOpen,
-  setIsMobileNavOpen
-}: { 
-  children: React.ReactNode;
-  title?: string;
-  breadcrumbs?: { label: string; href?: string }[];
-  user: any;
-  isMobileNavOpen: boolean;
-  setIsMobileNavOpen: (open: boolean) => void;
-}) => (
-  <div className="flex h-screen bg-background">
-    {/* Sidebar for larger screens */}
-    <div className="hidden md:block">
-      <Sidebar />
-    </div>
+const AppLayoutContent = memo(
+  ({
+    children,
+    title,
+    breadcrumbs,
+    user,
+    isMobileNavOpen,
+    setIsMobileNavOpen,
+  }: {
+    children: React.ReactNode;
+    title?: string;
+    breadcrumbs?: { label: string; href?: string }[];
+    user: any;
+    isMobileNavOpen: boolean;
+    setIsMobileNavOpen: (open: boolean) => void;
+  }) => (
+    <div className="flex h-screen bg-background">
+      {/* Sidebar for larger screens */}
+      <div className="hidden md:block">
+        <Sidebar />
+      </div>
 
-    {/* Mobile Navigation */}
-    <MobileNav
-      isOpen={isMobileNavOpen}
-      onClose={() => setIsMobileNavOpen(false)}
-      user={user}
-    />
-
-    <div className="flex flex-col flex-1 overflow-hidden">
-      <Topbar
-        onMenuClick={() => setIsMobileNavOpen(true)}
-        title={title}
+      {/* Mobile Navigation */}
+      <MobileNav
+        isOpen={isMobileNavOpen}
+        onClose={() => setIsMobileNavOpen(false)}
         user={user}
       />
 
-      <main className="flex-1 overflow-y-auto p-4 md:p-6">
-        {breadcrumbs && breadcrumbs.length > 0 && (
-          <div className="mb-4">
-            <Breadcrumb items={breadcrumbs} />
-          </div>
-        )}
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <Topbar
+          onMenuClick={() => setIsMobileNavOpen(true)}
+          title={title}
+          user={user}
+        />
 
-        <div>{children}</div>
-      </main>
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">
+          {breadcrumbs && breadcrumbs.length > 0 && (
+            <div className="mb-4">
+              <Breadcrumb items={breadcrumbs} />
+            </div>
+          )}
+
+          <div>{children}</div>
+        </main>
+      </div>
     </div>
-  </div>
-));
+  )
+);
 
 AppLayoutContent.displayName = "AppLayoutContent";
 
@@ -74,12 +75,12 @@ export const AppLayout = ({
   requireAuth = true,
   allowedRoles,
 }: AppLayoutProps) => {
-  const { user: authUser, isLoading, isAuthenticated, checkRole } = useAuth();
+  const { user, isLoading, isAuthenticated, checkRole } = useAuth();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const navigate = useNavigate();
 
   // Convert user to the expected format if needed
-  const user = authUser ? (authUser._id ? authUser : adaptApiUserToAppUser(authUser)) : null;
+  // const user = authUser ? (authUser._id ? authUser : adaptApiUserToAppUser(authUser)) : null;
 
   useEffect(() => {
     if (!isLoading && requireAuth && !isAuthenticated) {
@@ -125,10 +126,10 @@ export const AppLayout = ({
   }
 
   return (
-    <AppLayoutContent 
-      title={title} 
-      breadcrumbs={breadcrumbs} 
-      user={user} 
+    <AppLayoutContent
+      title={title}
+      breadcrumbs={breadcrumbs}
+      user={user}
       isMobileNavOpen={isMobileNavOpen}
       setIsMobileNavOpen={setIsMobileNavOpen}
     >

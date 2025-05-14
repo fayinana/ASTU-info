@@ -21,7 +21,7 @@ interface PostComment {
 
 interface Post {
   _id: string;
-  author: PostAuthor | string;
+  author: PostAuthor;
   type: "announcement" | "instructional" | "public";
   title: string;
   content: string;

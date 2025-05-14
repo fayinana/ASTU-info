@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -14,25 +13,25 @@ import { InputField } from "@/components/form/InputField";
 import { SelectField } from "@/components/form/SelectField";
 import { FileUploader } from "@/components/form/FileUploader";
 import { TextareaField } from "@/components/form/TextareaField";
-import { useAuth } from "@/context/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 
 interface ResourceUploadDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: { file: File, data: any }) => void;
+  onSubmit: (data: { file: File; data: any }) => void;
   isSubmitting: boolean;
 }
 
-const ResourceUploadDialog: React.FC<ResourceUploadDialogProps> = ({ 
-  open, 
-  onOpenChange, 
+const ResourceUploadDialog: React.FC<ResourceUploadDialogProps> = ({
+  open,
+  onOpenChange,
   onSubmit,
-  isSubmitting 
+  isSubmitting,
 }) => {
   const { user } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  
+
   const form = useForm({
     defaultValues: {
       title: "",

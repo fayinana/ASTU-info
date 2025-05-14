@@ -7,22 +7,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Pagination } from "../ui/pagination";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { TableActions } from "./TableActions";
-import {
-  SearchSkeleton,
-  TableSkeleton,
-} from "@/components/skeletons/TableSkeleton";
+import { TableSkeleton } from "@/components/skeletons/TableSkeleton";
 import {
   ChevronsLeft,
   ChevronLeft,
   ChevronRight,
   ChevronsRight,
-  Search,
 } from "lucide-react";
 import FilterBar from "./FilterBar";
+import ApiQuerySender from "@/lib/apiQuery";
 
 export interface Column<T> {
   header: string;
@@ -32,7 +27,7 @@ export interface Column<T> {
 }
 
 interface DataTableProps<T> {
-  value: string;
+  value?: string;
   columns: Column<T>[];
   data: T[] | undefined;
   isLoading?: boolean;
@@ -60,7 +55,6 @@ interface DataTableProps<T> {
   };
   searchable?: boolean;
   searchPlaceholder?: string;
-  onSearch?: (query: string) => void;
   defaultSearchValue?: string;
   filters?: {
     name: string;
@@ -68,12 +62,11 @@ interface DataTableProps<T> {
     options: { label: string; value: string }[];
     selectedValue?: string;
   }[];
-  onFilter?: (field: string, value: string) => void;
-  onClearFilters?: () => void;
+  querySender: ApiQuerySender;
 }
 
 export function DataTable<T>({
-  value = "item", // Default value to prevent undefined errors
+  value = "item",
   columns,
   data = [],
   isLoading = false,
@@ -86,11 +79,9 @@ export function DataTable<T>({
   searchable = false,
   searchPlaceholder = "Search...",
   defaultSearchValue = "",
-  onSearch,
   filters,
-  onFilter,
-  onClearFilters,
   hideDelete = () => false,
+  querySender,
 }: DataTableProps<T>) {
   const renderCellContent = (row: T, column: Column<T>) => {
     if (column.cell) {
@@ -102,25 +93,57 @@ export function DataTable<T>({
     }
 
     const key = column.accessorKey as string;
-    const value = key.split(".").reduce((obj: any, path: string) => {
+    const cellValue = key.split(".").reduce((obj: any, path: string) => {
       return obj && obj[path] !== undefined ? obj[path] : undefined;
     }, row as any);
 
-    return value !== undefined ? String(value) : "";
+    return cellValue !== undefined ? String(cellValue) : "";
   };
 
   const hasActions = !!(onView || onEdit || onDelete || additionalActions);
+
+  // Handle search updates
+  const handleSearch = (query: string) => {
+    querySender.setParam("search", query);
+  };
+
+  // Handle filter updates
+  const handleFilter = (field: string, value: string) => {
+    if (value) {
+      querySender.setParam(field, value);
+    } else {
+      querySender.removeParam(field);
+    }
+    // Reset to first page when filters change
+    if (pagination) {
+      querySender.setParam("page", "1");
+    }
+  };
+
+  // Handle clear filters
+  const handleClearFilters = () => {
+    querySender.clearParams();
+    if (pagination) {
+      querySender.setParam("page", "1");
+    }
+  };
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    querySender.setParam("page", page.toString());
+    pagination?.onPageChange(page);
+  };
 
   return (
     <div className="space-y-4">
       {searchable && (
         <FilterBar
-          onSearch={onSearch}
+          onSearch={handleSearch}
           searchPlaceholder={searchPlaceholder}
           defaultSearchValue={defaultSearchValue}
           filters={filters}
-          onFilter={onFilter}
-          onClear={onClearFilters}
+          onFilter={handleFilter}
+          onClear={handleClearFilters}
         />
       )}
       <div className="rounded-md border">
@@ -165,7 +188,6 @@ export function DataTable<T>({
                       {renderCellContent(row, column)}
                     </TableCell>
                   ))}
-
                   {hasActions && (
                     <TableCell className="text-right">
                       <TableActions
@@ -200,24 +222,22 @@ export function DataTable<T>({
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => pagination.onPageChange(1)}
+              onClick={() => handlePageChange(1)}
               disabled={pagination.currentPage === 1}
-              className={`${
+              className={
                 pagination.currentPage === 1 ? "cursor-not-allowed" : ""
-              }`}
+              }
             >
               <ChevronsLeft className="w-4 h-4" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              onClick={() =>
-                pagination.onPageChange(pagination.currentPage - 1)
-              }
+              onClick={() => handlePageChange(pagination.currentPage - 1)}
               disabled={pagination.currentPage === 1}
-              className={`${
+              className={
                 pagination.currentPage === 1 ? "cursor-not-allowed" : ""
-              }`}
+              }
             >
               <ChevronLeft className="w-4 h-4" />
             </Button>
@@ -240,7 +260,7 @@ export function DataTable<T>({
                       variant={
                         page === pagination.currentPage ? "default" : "outline"
                       }
-                      onClick={() => pagination.onPageChange(page)}
+                      onClick={() => handlePageChange(page)}
                     >
                       {page}
                     </Button>
@@ -251,28 +271,26 @@ export function DataTable<T>({
             <Button
               variant="ghost"
               size="icon"
-              onClick={() =>
-                pagination.onPageChange(pagination.currentPage + 1)
-              }
+              onClick={() => handlePageChange(pagination.currentPage + 1)}
               disabled={pagination.currentPage === pagination.totalPages}
-              className={`${
+              className={
                 pagination.currentPage === pagination.totalPages
                   ? "cursor-not-allowed"
                   : ""
-              }`}
+              }
             >
               <ChevronRight className="w-4 h-4" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => pagination.onPageChange(pagination.totalPages)}
+              onClick={() => handlePageChange(pagination.totalPages)}
               disabled={pagination.currentPage === pagination.totalPages}
-              className={`${
+              className={
                 pagination.currentPage === pagination.totalPages
                   ? "cursor-not-allowed"
                   : ""
-              }`}
+              }
             >
               <ChevronsRight className="w-4 h-4" />
             </Button>
