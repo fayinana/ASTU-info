@@ -49,7 +49,9 @@ export const createResource = async (data: ResourceCreationRequest) => {
     data.files.forEach((file, index) =>
       formData.append(`files[${index}]`, file)
     );
-
+    console.log("====================================");
+    console.log(formData);
+    console.log("====================================");
     const response = await apiClient.post<ResourceCreationResponse>(
       "/resources",
       formData,
@@ -57,6 +59,9 @@ export const createResource = async (data: ResourceCreationRequest) => {
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
+    console.log("====================================");
+    console.log(response);
+    console.log("====================================");
     return response.data;
   } catch (error) {
     throw handleApiError(error);
