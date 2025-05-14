@@ -23,7 +23,7 @@ import AdminAnnouncementNew from "@/pages/admin/announcements/new";
 // import AdminPostView from "@/pages/admin/posts/[id]";
 // import AdminAddPost from "@/pages/admin/posts/new"; // New import
 // import AdminProfile from "@/pages/admin/Profile";
-// import AdminResources from "@/pages/admin/Resources";
+import AdminResources from "@/pages/admin/resource/Resources";
 // import AdminSettings from "@/pages/admin/settings";
 // import AdminStudents from "@/pages/admin/Students";
 // import AdminStudentSearch from "@/pages/admin/StudentSearch";
@@ -31,7 +31,7 @@ import AdminAnnouncementNew from "@/pages/admin/announcements/new";
 // import TeacherResponsibilitiesAssignment from "@/pages/admin/teachers/assign-responsibilities"; // New import
 // import AdminTeachers from "@/pages/admin/Teachers";
 // import AddNewAdmin from "@/pages/admin/users/add-admin"; // New import
-// import UploadReacourse from "@/pages/admin/UploadReacourse";
+import UploadReacourse from "@/pages/admin/resource/UploadReacourse";
 // import AdminUserView from "@/pages/admin/users/[id]";
 
 // // Teacher pages
@@ -217,7 +217,7 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     /> */}
-    {/* <Route
+    <Route
       path="/admin/resources"
       element={
         <ProtectedRoute>
@@ -226,7 +226,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
     {/* <Route
       path="/admin/profile"
       element={
@@ -247,7 +247,7 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     /> */}
-    {/* <Route
+    <Route
       path="/admin/upload-resource"
       element={
         <ProtectedRoute>
@@ -256,7 +256,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
 
     {/* Teacher Routes */}
     {/* <Route

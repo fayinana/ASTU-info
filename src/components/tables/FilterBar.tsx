@@ -113,7 +113,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <SelectContent>
             <SelectItem value="all">All {filter.label}</SelectItem>
             {filter.options.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
+              <SelectItem key={option.value} value={option.value || "all"}>
                 {option.label}
               </SelectItem>
             ))}
