@@ -2,14 +2,14 @@ import { Toaster } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useEffect, useState, memo } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-// import Index from "@/pages/Index";
-// import Login from "@/pages/Login";
-// import NotFound from "@/pages/NotFound";
-// import Register from "@/pages/Register";
-// import RegisterSuccess from "@/pages/RegisterSuccess";
-// import Unauthorized from "@/pages/Unauthorized";
+import Index from "@/pages/Index";
+import Login from "@/pages/auth/Login";
+import NotFound from "@/pages/NotFound";
+import Register from "@/pages/auth/Register";
+import RegisterSuccess from "@/pages/auth/RegisterSuccess";
+import Unauthorized from "@/pages/auth/Unauthorized";
 
 // import ProtectedRoute from "@/components/auth/ProtectedRoute";
 // import RoleGuard from "@/components/auth/RoleGuard";
@@ -56,16 +56,17 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 // // Chat
 // import Chat from "@/pages/chat/Chat";
 import { ThemeProvider } from "next-themes";
+import { AuthProvider } from "./context/AuthContext";
 // import { AuthProvider } from "./context/useAuth";
 
 // Create a memoized Routes component to prevent unnecessary rerenders
 const AppRoutes = memo(() => (
   <Routes>
-    {/* <Route path="/" element={<Index />} />
+    <Route path="/" element={<Index />} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
     <Route path="/register-success" element={<RegisterSuccess />} />
-    <Route path="/unauthorized" element={<Unauthorized />} /> */}
+    <Route path="/unauthorized" element={<Unauthorized />} />
 
     {/* Admin Routes */}
     {/* <Route

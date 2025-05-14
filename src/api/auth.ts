@@ -17,7 +17,13 @@ import { handleApiError } from "../lib/apiClient";
 // Register a user
 export const register = async (data: RegisterRequest) => {
   try {
-    const response = await apiClient.post<RegisterResponse>("/register", data);
+    console.log("====================================");
+    console.log(data);
+    console.log("====================================");
+    const response = await apiClient.post<RegisterResponse>(
+      "/auth/register",
+      data
+    );
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -40,7 +46,7 @@ export const adminRegister = async (data: AdminRegisterRequest) => {
 // Login
 export const login = async (data: LoginRequest) => {
   try {
-    const response = await apiClient.post<LoginResponse>("/login", data);
+    const response = await apiClient.post<LoginResponse>("/auth/login", data);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -50,7 +56,7 @@ export const login = async (data: LoginRequest) => {
 // Logout
 export const logout = async () => {
   try {
-    const response = await apiClient.post<LogoutResponse>("/logout");
+    const response = await apiClient.post<LogoutResponse>("/auth/logout");
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -58,10 +64,13 @@ export const logout = async () => {
 };
 
 // Approve/suspend/reject a user
-export const approveUser = async (
-  id: string,
-  userStatus: "approve" | "suspend" | "reject"
-) => {
+export const approveUser = async ({
+  id,
+  userStatus,
+}: {
+  id: string;
+  userStatus: "approve" | "suspend" | "reject";
+}) => {
   try {
     const response = await apiClient.put<ApprovalResponse>(
       `/users/${id}/status/${userStatus}`
