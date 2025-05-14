@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import FilterBar from "./FilterBar";
 import ApiQuerySender from "@/lib/apiQuery";
+// import ApiQuerySender from "./ApiQuerySender";
 
 export interface Column<T> {
   header: string;
@@ -27,7 +28,7 @@ export interface Column<T> {
 }
 
 interface DataTableProps<T> {
-  value?: string;
+  value: string;
   columns: Column<T>[];
   data: T[] | undefined;
   isLoading?: boolean;
@@ -62,7 +63,7 @@ interface DataTableProps<T> {
     options: { label: string; value: string }[];
     selectedValue?: string;
   }[];
-  querySender: ApiQuerySender;
+  querySender: ApiQuerySender; // Add ApiQuerySender as a prop
 }
 
 export function DataTable<T>({
@@ -93,11 +94,11 @@ export function DataTable<T>({
     }
 
     const key = column.accessorKey as string;
-    const cellValue = key.split(".").reduce((obj: any, path: string) => {
+    const value = key.split(".").reduce((obj: any, path: string) => {
       return obj && obj[path] !== undefined ? obj[path] : undefined;
     }, row as any);
 
-    return cellValue !== undefined ? String(cellValue) : "";
+    return value !== undefined ? String(value) : "";
   };
 
   const hasActions = !!(onView || onEdit || onDelete || additionalActions);
@@ -114,17 +115,13 @@ export function DataTable<T>({
     } else {
       querySender.removeParam(field);
     }
-    // Reset to first page when filters change
-    if (pagination) {
-      querySender.setParam("page", "1");
-    }
   };
 
   // Handle clear filters
   const handleClearFilters = () => {
     querySender.clearParams();
     if (pagination) {
-      querySender.setParam("page", "1");
+      querySender.setParam("page", "1"); // Reset to first page
     }
   };
 
@@ -224,9 +221,9 @@ export function DataTable<T>({
               size="icon"
               onClick={() => handlePageChange(1)}
               disabled={pagination.currentPage === 1}
-              className={
+              className={`${
                 pagination.currentPage === 1 ? "cursor-not-allowed" : ""
-              }
+              }`}
             >
               <ChevronsLeft className="w-4 h-4" />
             </Button>
@@ -235,9 +232,9 @@ export function DataTable<T>({
               size="icon"
               onClick={() => handlePageChange(pagination.currentPage - 1)}
               disabled={pagination.currentPage === 1}
-              className={
+              className={`${
                 pagination.currentPage === 1 ? "cursor-not-allowed" : ""
-              }
+              }`}
             >
               <ChevronLeft className="w-4 h-4" />
             </Button>
@@ -273,11 +270,11 @@ export function DataTable<T>({
               size="icon"
               onClick={() => handlePageChange(pagination.currentPage + 1)}
               disabled={pagination.currentPage === pagination.totalPages}
-              className={
+              className={`${
                 pagination.currentPage === pagination.totalPages
                   ? "cursor-not-allowed"
                   : ""
-              }
+              }`}
             >
               <ChevronRight className="w-4 h-4" />
             </Button>
@@ -286,11 +283,11 @@ export function DataTable<T>({
               size="icon"
               onClick={() => handlePageChange(pagination.totalPages)}
               disabled={pagination.currentPage === pagination.totalPages}
-              className={
+              className={`${
                 pagination.currentPage === pagination.totalPages
                   ? "cursor-not-allowed"
                   : ""
-              }
+              }`}
             >
               <ChevronsRight className="w-4 h-4" />
             </Button>

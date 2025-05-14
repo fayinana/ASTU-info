@@ -4,7 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 
 export function usePosts(query: GetPostsQuery) {
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["posts" , query],
+    queryKey: [
+      "posts",
+      query.fields,
+      query.limit,
+      query.page,
+      query.search,
+      query.sort,
+    ],
     queryFn: () => fetchPosts(query),
   });
 
