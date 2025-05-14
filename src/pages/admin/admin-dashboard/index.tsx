@@ -22,18 +22,17 @@ const AdminDashboard = () => {
     limit: 100,
   });
 
-  if (isLoadingUser || isLoadingAnnouncements) return <p>loding...</p>;
-
-  const pendingApprovals = users.filter((user) => user.status === "pending");
+  const pendingApprovals =
+    users?.filter((user) => user.status === "pending") || [];
   const studentsCount =
     users?.filter((user) => user.role === "student").length || 0;
   const teachersCount =
     users?.filter((user) => user.role === "teacher").length || 0;
   const adminCount = users?.filter((user) => user.role === "admin").length || 0;
-  const totalUsers = users.length;
-  const totalPosts = posts.length;
+  const totalUsers = users?.length || 0;
+  const totalPosts = posts?.length || 0;
   const totalAnnouncements = announcements.length || 0;
-  const pendingUsers = pendingApprovals.length;
+  const pendingUsers = pendingApprovals?.length || 0;
   const recentPosts = posts.slice(0, 5);
 
   return (

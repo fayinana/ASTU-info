@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useEffect, useState, memo } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import Index from "@/pages/Index";
 import Login from "@/pages/auth/Login";
@@ -16,9 +16,9 @@ import RoleGuard from "@/components/auth/RoleGuard";
 
 // // Admin pages
 import AdminDashboard from "@/pages/admin/admin-dashboard";
-// import AdminAnnouncementView from "@/pages/admin/announcements/[id]";
-// import AdminAnnouncements from "@/pages/admin/announcements/index";
-// import AdminAnnouncementNew from "@/pages/admin/announcements/new";
+import AdminAnnouncements from "@/pages/admin/announcements/index";
+import AdminAnnouncementView from "@/pages/admin/announcements/[id]";
+import AdminAnnouncementNew from "@/pages/admin/announcements/new";
 // import AdminPosts from "@/pages/admin/Posts";
 // import AdminPostView from "@/pages/admin/posts/[id]";
 // import AdminAddPost from "@/pages/admin/posts/new"; // New import
@@ -81,10 +81,7 @@ const AppRoutes = memo(() => (
     />
 
     {/* Update the route to the new dashboard page */}
-    {/* <Route
-      path="/admin"
-      element={<Navigate to="/admin/dashboard" replace />}
-    /> */}
+    <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
 
     {/* <Route
       path="/admin/posts"
@@ -117,7 +114,7 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     /> */}
-    {/* <Route
+    <Route
       path="/admin/announcements"
       element={
         <ProtectedRoute>
@@ -126,8 +123,8 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
-    {/* <Route
+    />
+    <Route
       path="/admin/announcements/:id"
       element={
         <ProtectedRoute>
@@ -136,9 +133,9 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
 
-    {/* <Route
+    <Route
       path="/admin/announcements/new"
       element={
         <ProtectedRoute>
@@ -147,7 +144,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
     {/* <Route
       path="/admin/users/students"
       element={

@@ -70,6 +70,7 @@ interface CreatePostRequest {
   content: string;
   title: string;
   files?: File;
+  type: "announcement" | "instructional" | "public";
 }
 
 interface GetPostsQuery {
