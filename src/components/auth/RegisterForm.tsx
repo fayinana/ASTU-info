@@ -25,24 +25,27 @@ import {
 } from "@/components/ui/select";
 import { useRegister } from "@/hooks/useAuth";
 import { RegistrationFormValues, registrationSchema } from "@/lib/zodSchemas";
-import { UserRegister } from "@/types/auth";
+import { RegisterRequest } from "@/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-export interface UserRegisterForm extends UserRegister {
+export interface UserRegisterForm extends RegisterRequest {
   confirmPassword: string;
 }
 export const RegisterForm = () => {
-  const form = useForm<RegistrationFormValues>({
-    resolver: zodResolver(registrationSchema),
+  const form = useForm<RegisterRequest>({
     defaultValues: {
       studentID: "",
       email: "",
       password: "",
-      confirmPassword: "",
       name: "",
       role: "student",
+      batch: "",
+      department: "",
+      occupation: "",
+      school: "",
+      section: "",
     },
   });
 
@@ -50,18 +53,27 @@ export const RegisterForm = () => {
   const { isLoading, register } = useRegister();
 
   const handleSubmit = (data: UserRegisterForm) => {
-    if (data.password !== data.confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
-    }
-
+    // if (data.password !== data.confirmPassword) {
+    //   toast.error("Passwords do not match");
+    //   return;
+    // }
+    console.log("====================================");
+    console.log(data);
+    console.log("====================================");
     // Extract only the fields needed for registration
-    const registrationData: UserRegister = {
+    const registrationData: RegisterRequest = {
       name: data.name,
       email: data.email,
       password: data.password,
       role: data.role,
-      ...(data.role === "student" && { studentID: data.studentID }),
+      ...(data.role === "student" && {
+        studentID: data.studentID,
+        batch: data.batch,
+        department: data.department,
+        occupation: data.occupation,
+        school: data.school,
+        section: data.section,
+      }),
     };
 
     register(registrationData); // Your API call
@@ -133,7 +145,7 @@ export const RegisterForm = () => {
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="confirmPassword"
                 render={({ field }) => (
@@ -150,7 +162,7 @@ export const RegisterForm = () => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
             </div>
 
             <FormField
@@ -199,6 +211,71 @@ export const RegisterForm = () => {
                       <FormLabel>ID </FormLabel>
                       <FormControl>
                         <Input placeholder="e.g., ugr/23456/14" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="department"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Department</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., SE" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="batch"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Batch</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., SE" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="occupation"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Occupation</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., " {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="school"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>School</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., CSE" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="section"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Section </FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., 2" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

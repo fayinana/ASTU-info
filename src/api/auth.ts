@@ -17,6 +17,9 @@ import { handleApiError } from "../lib/apiClient";
 // Register a user
 export const register = async (data: RegisterRequest) => {
   try {
+    console.log("====================================");
+    console.log(data);
+    console.log("====================================");
     const response = await apiClient.post<RegisterResponse>(
       "/auth/register",
       data
