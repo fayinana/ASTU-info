@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { useCreatePost } from "@/hooks/usePosts";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -77,14 +76,16 @@ export const CreatePostForm = ({
     formData.append("title", values.title);
     formData.append("content", values.content);
     formData.append("type", values.type);
-    
+
     if (values.type !== "public" && values.target_department) {
       formData.append("target_department", values.target_department);
     }
-    
+
     if (values.type === "instructional") {
-      if (values.target_batch) formData.append("target_batch", values.target_batch);
-      if (values.target_section) formData.append("target_section", values.target_section);
+      if (values.target_batch)
+        formData.append("target_batch", values.target_batch);
+      if (values.target_section)
+        formData.append("target_section", values.target_section);
     }
 
     create(formData, {

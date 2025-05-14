@@ -1,43 +1,19 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { DataTable } from "@/components/tables/DataTable";
 import StatusBadge from "@/components/tables/StatusBadge";
 import { Heart, MessageSquare } from "lucide-react";
-import { usePosts } from "@/hooks/usePosts";
 import { Post } from "@/types/post";
 import { Avatar } from "@/components/user/Avatar";
 
 interface PostsSectionProps {
-  limit?: number;
-  type?: "announcement" | "instructional" | "public";
-  showPagination?: boolean;
+  posts: Post[];
+  isLoading: boolean;
 }
 
-const PostsSection: React.FC<PostsSectionProps> = ({
-  limit = 5,
-  type,
-  showPagination = false,
-}) => {
+const PostsSection: React.FC<PostsSectionProps> = ({ posts, isLoading }) => {
   const navigate = useNavigate();
-  
-  const options = {
-    initialLimit: limit,
-    initialFilters: {} as Record<string, any>
-  };
-  
-  if (type) {
-    options.initialFilters.type = type;
-  }
-  
-  const { 
-    posts, 
-    isLoading,
-    pagination,
-    setSearch,
-    setPagination
-  } = usePosts(options);
 
   const columns = [
     {
@@ -110,9 +86,7 @@ const PostsSection: React.FC<PostsSectionProps> = ({
   return (
     <Card>
       <CardHeader className="border-b pb-3">
-        <h3 className="text-lg font-medium">
-          {type ? `${type.charAt(0).toUpperCase() + type.slice(1)} Posts` : "Recent Posts"}
-        </h3>
+        <h3 className="text-lg font-medium">Recent Posts</h3>
       </CardHeader>
       <CardContent className="p-0">
         <DataTable
@@ -121,13 +95,6 @@ const PostsSection: React.FC<PostsSectionProps> = ({
           data={posts}
           isLoading={isLoading}
           onView={(row) => navigate(`/admin/posts/${row._id}`)}
-          pagination={showPagination ? {
-            currentPage: pagination.page,
-            totalPages: pagination.totalPages,
-            onPageChange: (newPage) => setPagination(newPage)
-          } : undefined}
-          searchable={showPagination}
-          onSearch={(query) => setSearch(query || null)}
           searchPlaceholder="Search posts..."
         />
       </CardContent>

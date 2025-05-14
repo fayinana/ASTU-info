@@ -18,7 +18,7 @@ import {
   Bell,
 } from "lucide-react";
 import { User } from "@/lib/types";
-import { useAuth } from "@/context/useAuth";
+import { useAuth } from "@/context/AuthContext";
 
 interface TopbarProps {
   onMenuClick: () => void;

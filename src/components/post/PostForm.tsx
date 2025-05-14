@@ -29,7 +29,7 @@ import {
 import { POST_TYPES } from "@/lib/constants";
 import { FileUploader } from "../form/FileUploader";
 import { PostFormValues, postSchema } from "@/lib/zodSchemas";
-import { useAuth } from "@/context/useAuth";
+import { useAuth } from "@/context/AuthContext";
 
 interface PostFormProps {
   onSubmit: (data: PostFormValues) => void;

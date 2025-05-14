@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,7 +44,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState(defaultSearchValue);
 
-  // Debounced search function to prevent excessive API calls
+  // Debounced search function to prevent excessive updates
   const debouncedSearch = React.useCallback(
     debounce((value: string) => {
       if (onSearch) {
@@ -55,7 +54,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     [onSearch]
   );
 
-  // Update search when default value changes (from URL params)
+  // Sync search query with default value (from URL)
   useEffect(() => {
     setSearchQuery(defaultSearchValue);
   }, [defaultSearchValue]);
@@ -105,7 +104,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       {filters.map((filter) => (
         <Select
           key={filter.name}
-          defaultValue={filter.selectedValue || ""}
+          value={filter.selectedValue || ""}
           onValueChange={(value) => handleFilterChange(filter.name, value)}
         >
           <SelectTrigger className="w-[180px]">

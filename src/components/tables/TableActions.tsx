@@ -47,7 +47,7 @@ export interface TableActionsProps {
       | "link";
     className?: string;
   }>;
-  value?: any; // For compatibility with DataTable
+  value?: any;
 }
 
 export const TableActions = ({
@@ -102,60 +102,43 @@ export const TableActions = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Actions */}
-      <div className="flex justify-end space-x-2">
-        {additionalActions?.map((action, index) => (
-          <Button
-            key={index}
-            variant={action.variant || "default"}
-            size="sm"
-            onClick={action.onClick}
-            className={action.className}
-          >
-            {action.label}
+      {/* Actions Dropdown */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="sm">
+            <MoreHorizontal className="w-4 h-4" />
           </Button>
-        ))}
-
-        {onView && !hideView && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onView}
-            className="bg-background border-muted-foreground/20 text-muted-foreground hover:text-primary hover:border-primary transition-colors"
-          >
-            <Eye className="h-3.5 w-3.5 mr-1" />
-            {viewLabel}
-          </Button>
-        )}
-
-        {!hideEdit && onEdit && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onEdit}
-            className="bg-background border-muted-foreground/20 text-muted-foreground hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 transition-colors"
-          >
-            <Edit className="h-3.5 w-3.5 mr-1" />
-            {editLabel}
-          </Button>
-        )}
-
-        {onDelete && !hideDelete && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowDeleteConfirm(true)}
-            className={
-              !hideDanger
-                ? "bg-background border-muted-foreground/20 text-muted-foreground hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-colors"
-                : "bg-background border-muted-foreground/20 text-muted-foreground"
-            }
-          >
-            <Trash className="h-3.5 w-3.5 mr-1" />
-            {deleteLabel}
-          </Button>
-        )}
-      </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          {!hideView && onView && (
+            <DropdownMenuItem onClick={onView}>
+              <Eye className="mr-2 w-4 h-4" /> {viewLabel}
+            </DropdownMenuItem>
+          )}
+          {!hideEdit && onEdit && (
+            <DropdownMenuItem onClick={onEdit}>
+              <Edit className="mr-2 w-4 h-4" /> {editLabel}
+            </DropdownMenuItem>
+          )}
+          {!hideDelete && onDelete && (
+            <DropdownMenuItem
+              onClick={() => setShowDeleteConfirm(true)}
+              className="text-destructive"
+            >
+              <Trash className="mr-2 w-4 h-4" /> {deleteLabel}
+            </DropdownMenuItem>
+          )}
+          {additionalActions.map((action, index) => (
+            <DropdownMenuItem
+              key={index}
+              onClick={action.onClick}
+              className={action.className}
+            >
+              {action.label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </>
   );
 };

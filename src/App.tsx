@@ -11,11 +11,11 @@ import Register from "@/pages/auth/Register";
 import RegisterSuccess from "@/pages/auth/RegisterSuccess";
 import Unauthorized from "@/pages/auth/Unauthorized";
 
-// import ProtectedRoute from "@/components/auth/ProtectedRoute";
-// import RoleGuard from "@/components/auth/RoleGuard";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import RoleGuard from "@/components/auth/RoleGuard";
 
 // // Admin pages
-// import AdminDashboard from "@/pages/admin/admin-dashboard";
+import AdminDashboard from "@/pages/admin/admin-dashboard";
 // import AdminAnnouncementView from "@/pages/admin/announcements/[id]";
 // import AdminAnnouncements from "@/pages/admin/announcements/index";
 // import AdminAnnouncementNew from "@/pages/admin/announcements/new";
@@ -69,7 +69,7 @@ const AppRoutes = memo(() => (
     <Route path="/unauthorized" element={<Unauthorized />} />
 
     {/* Admin Routes */}
-    {/* <Route
+    <Route
       path="/admin/dashboard"
       element={
         <ProtectedRoute>
@@ -78,7 +78,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
 
     {/* Update the route to the new dashboard page */}
     {/* <Route
