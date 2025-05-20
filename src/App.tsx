@@ -58,6 +58,8 @@ import UploadReacourse from "@/pages/admin/resource/UploadReacourse";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "./context/AuthContext";
 import AdminTeachers from "./pages/admin/teacher/Teachers";
+import AdminStudentSearch from "./pages/admin/students/StudentSearch";
+import AdminStudents from "./pages/admin/students/Students";
 // import { AuthProvider } from "./context/useAuth";
 
 // Create a memoized Routes component to prevent unnecessary rerenders
@@ -146,7 +148,7 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
-    {/* <Route
+    <Route
       path="/admin/users/students"
       element={
         <ProtectedRoute>
@@ -155,7 +157,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
     <Route
       path="/admin/users/teachers"
       element={
@@ -198,7 +200,7 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     /> */}
-    {/* <Route
+    <Route
       path="/admin/student-search"
       element={
         <ProtectedRoute>
@@ -207,7 +209,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
     <Route
       path="/admin/teachers/assign-responsibilities"
       element={
