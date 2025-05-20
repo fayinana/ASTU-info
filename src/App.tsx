@@ -28,7 +28,7 @@ import AdminResources from "@/pages/admin/resource/Resources";
 // import AdminStudents from "@/pages/admin/Students";
 // import AdminStudentSearch from "@/pages/admin/StudentSearch";
 // import TeacherResponsibilities from "@/pages/admin/TeacherResponsibilities";
-// import TeacherResponsibilitiesAssignment from "@/pages/admin/teachers/assign-responsibilities"; // New import
+import TeacherResponsibilitiesAssignment from "@/pages/admin/teacher/assign-responsibilities"; // New import
 // import AdminTeachers from "@/pages/admin/Teachers";
 // import AddNewAdmin from "@/pages/admin/users/add-admin"; // New import
 import UploadReacourse from "@/pages/admin/resource/UploadReacourse";
@@ -57,6 +57,7 @@ import UploadReacourse from "@/pages/admin/resource/UploadReacourse";
 // import Chat from "@/pages/chat/Chat";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "./context/AuthContext";
+import AdminTeachers from "./pages/admin/teacher/Teachers";
 // import { AuthProvider } from "./context/useAuth";
 
 // Create a memoized Routes component to prevent unnecessary rerenders
@@ -155,7 +156,7 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     /> */}
-    {/* <Route
+    <Route
       path="/admin/users/teachers"
       element={
         <ProtectedRoute>
@@ -164,7 +165,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
     {/* New route for assign teacher responsibilities */}
     {/* <Route
       path="/admin/teachers/assign-responsibilities"
@@ -207,16 +208,16 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     /> */}
-    {/* <Route
-      path="/admin/teacher-responsibilities"
+    <Route
+      path="/admin/teachers/assign-responsibilities"
       element={
         <ProtectedRoute>
           <RoleGuard allowedRoles={["admin"]}>
-            <TeacherResponsibilities />
+            <TeacherResponsibilitiesAssignment />
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
     <Route
       path="/admin/resources"
       element={

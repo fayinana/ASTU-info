@@ -1,33 +1,53 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useAssignTeacherResponsibilities, TeacherResponsibilityData } from "@/hooks/useTeacher";
-import { SectionAssignment } from "@/types/user";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import { Plus, X } from "lucide-react";
 import { LoadingOverlay } from "@/components/modals/LoadingOverlay";
+import { useAssignTeacherResponsibilities } from "@/hooks/useUsers";
+import { TeacherAssignment } from "@/types/auth";
+
+// Sample options (replace with API data in a real app)
+const schools = ["Electrical", "Computing", "Mechanical"];
+const departments = ["Software", "Computer Science", "Electrical Engineering"];
+const sections = ["1", "2", "3", "4"];
+const subjects = [
+  "Web Development",
+  "Testing and Quality Assurance",
+  "Fundamentals of Software Engineering",
+  "Database Systems",
+];
 
 interface AssignResponsibilitiesProps {
   teacherId: string;
-  initialAssignments?: SectionAssignment[];
+  initialAssignments?: TeacherAssignment[];
   onSuccess?: () => void;
 }
 
-export const AssignResponsibilities = ({ 
+export const AssignResponsibilities = ({
   teacherId,
   initialAssignments = [],
-  onSuccess
+  onSuccess,
 }: AssignResponsibilitiesProps) => {
-  const [assignments, setAssignments] = useState<SectionAssignment[]>(initialAssignments);
-  
-  const { assignResponsibilities, isLoading } = useAssignTeacherResponsibilities();
+  const [assignments, setAssignments] = useState<TeacherAssignment[]>(initialAssignments);
+
+  const { assignTeacherResponsibilities, isLoading } = useAssignTeacherResponsibilities();
 
   useEffect(() => {
-    if (initialAssignments?.length) {
+    if (initialAssignments.length > 0) {
       setAssignments(initialAssignments);
     }
   }, [initialAssignments]);
@@ -35,17 +55,19 @@ export const AssignResponsibilities = ({
   const handleAddAssignment = () => {
     setAssignments([
       ...assignments,
-      { section: "", subject: "", department: "", school: "" }
+      { section: "", subject: "", department: "", school: "" },
     ]);
   };
 
   const handleRemoveAssignment = (index: number) => {
-    const newAssignments = [...assignments];
-    newAssignments.splice(index, 1);
-    setAssignments(newAssignments);
+    setAssignments(assignments.filter((_, i) => i !== index));
   };
 
-  const handleAssignmentChange = (index: number, field: keyof SectionAssignment, value: string) => {
+  const handleAssignmentChange = (
+    index: number,
+    field: keyof TeacherAssignment,
+    value: string
+  ) => {
     const newAssignments = [...assignments];
     newAssignments[index] = { ...newAssignments[index], [field]: value };
     setAssignments(newAssignments);
@@ -53,25 +75,32 @@ export const AssignResponsibilities = ({
 
   const handleSubmit = () => {
     // Validate fields
-    const hasEmptyFields = assignments.some(a => 
-      !a.section || !a.subject || !a.department || !a.school
+    const hasEmptyFields = assignments.some(
+      (a) => !a.section || !a.subject || !a.department || !a.school
     );
-    
     if (hasEmptyFields) {
       toast.error("Please fill in all fields for each assignment");
       return;
     }
 
-    const data: TeacherResponsibilityData = {
-      secAssigned: assignments
-    };
+    // Validate unique section-subject pairs
+    const assignmentKeys = assignments.map((a) => `${a.section}-${a.subject}`);
+    const uniqueKeys = new Set(assignmentKeys);
+    if (uniqueKeys.size !== assignmentKeys.length) {
+      toast.error("Duplicate section-subject assignments are not allowed");
+      return;
+    }
 
-    assignResponsibilities(
-      { teacherId, data },
-      { 
+    assignTeacherResponsibilities(
+      { id: teacherId, data: { assignments } },
+      {
         onSuccess: () => {
+          toast.success("Teacher responsibilities assigned successfully");
           if (onSuccess) onSuccess();
-        }
+        },
+        onError: (error) => {
+          toast.error(`Failed to assign responsibilities: ${error.message}`);
+        },
       }
     );
   };
@@ -89,7 +118,10 @@ export const AssignResponsibilities = ({
             </div>
           ) : (
             assignments.map((assignment, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-md relative">
+              <div
+                key={index}
+                className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-md relative"
+              >
                 <Button
                   type="button"
                   size="icon"
@@ -99,59 +131,99 @@ export const AssignResponsibilities = ({
                 >
                   <X className="h-4 w-4" />
                 </Button>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">School</label>
-                  <Input
+                  <Select
                     value={assignment.school}
-                    onChange={(e) => handleAssignmentChange(index, 'school', e.target.value)}
-                    placeholder="School"
-                  />
+                    onValueChange={(value) => handleAssignmentChange(index, "school", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select school" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {schools.map((school) => (
+                        <SelectItem key={school} value={school}>
+                          {school}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Department</label>
-                  <Input
+                  <Select
                     value={assignment.department}
-                    onChange={(e) => handleAssignmentChange(index, 'department', e.target.value)}
-                    placeholder="Department"
-                  />
+                    onValueChange={(value) => handleAssignmentChange(index, "department", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {departments.map((dept) => (
+                        <SelectItem key={dept} value={dept}>
+                          {dept}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Section</label>
-                  <Input
+                  <Select
                     value={assignment.section}
-                    onChange={(e) => handleAssignmentChange(index, 'section', e.target.value)}
-                    placeholder="Section"
-                  />
+                    onValueChange={(value) => handleAssignmentChange(index, "section", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select section" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {sections.map((section) => (
+                        <SelectItem key={section} value={section}>
+                          Section {section}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Subject</label>
-                  <Input
+                  <Select
                     value={assignment.subject}
-                    onChange={(e) => handleAssignmentChange(index, 'subject', e.target.value)}
-                    placeholder="Subject"
-                  />
+                    onValueChange={(value) => handleAssignmentChange(index, "subject", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select subject" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {subjects.map((subject) => (
+                        <SelectItem key={subject} value={subject}>
+                          {subject}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             ))
           )}
 
-          <Button 
-            type="button" 
-            variant="outline" 
+          <Button
+            type="button"
+            variant="outline"
             className="w-full"
             onClick={handleAddAssignment}
           >
             <Plus className="mr-2 h-4 w-4" /> Add Assignment
           </Button>
         </CardContent>
-        
+
         <CardFooter>
-          <Button 
-            className="w-full" 
+          <Button
+            className="w-full"
             onClick={handleSubmit}
             disabled={assignments.length === 0 || isLoading}
           >

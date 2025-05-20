@@ -7,6 +7,7 @@ interface BaseUser {
   status: "approved" | "pending" | "rejected" | "suspended";
   profilePic?: string;
   bio?: string;
+  
 }
 
 interface AdminUser extends BaseUser {
@@ -34,7 +35,30 @@ interface StudentUser extends BaseUser {
   studentID: string;
 }
 
-type User = AdminUser | TeacherUser | StudentUser;
+interface User {
+    _id: string;
+  name: string;
+  email: string;
+  role: "admin" | "teacher" | "student";
+  status: "approved" | "pending" | "rejected" | "suspended";
+  profilePic?: string;
+  bio?: string;
+   batch?: string;
+  section?: string;
+  school?: string;
+  department?: string;
+  studentID: string;
+    secAssigned?: {
+    section: string;
+    subject: string;
+    department: string;
+    school: string;
+  }[];
+  occupation?: string;
+  title?: string;
+  createdAt : string
+
+}
 
 interface GetUsersResponse {
   status: "success";
