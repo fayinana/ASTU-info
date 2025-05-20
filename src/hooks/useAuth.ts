@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { LoginResponse } from "../types/auth";
 export const useLogin = () => {
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  // const { setUser } = useAuth();
   const {
     mutate: login,
     error,
@@ -21,7 +21,7 @@ export const useLogin = () => {
   } = useMutation({
     mutationFn: loginApi,
     onSuccess: (data: LoginResponse) => {
-      setUser(data);
+      // setUser(data);
       toast.success(`Welcome back, ${data?.name}!`);
       const redirectPath = `/${data?.role}/dashboard`;
       localStorage.setItem("user", JSON.stringify(data));

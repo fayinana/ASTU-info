@@ -82,13 +82,14 @@ export const approveUser = async ({
 };
 
 // Assign teacher responsibilities
-export const assignTeacherResponsibilities = async (
+export const assignTeacherResponsibilities = async ({id,
+  data} :{
   id: string,
-  data: TeacherResponsibilitiesRequest
+  data: TeacherResponsibilitiesRequest}
 ) => {
   try {
     const response = await apiClient.put<TeacherResponsibilitiesResponse>(
-      `/teachers/${id}/responsibilities`,
+      `/auth/assignTeacherResponsibilities/${id}`,
       data
     );
     return response.data;
@@ -100,7 +101,7 @@ export const assignTeacherResponsibilities = async (
 // Get current user profile
 export const getProfile = async () => {
   try {
-    const response = await apiClient.get<GetProfileResponse>("/profile");
+    const response = await apiClient.get<GetProfileResponse>("/auth/getProfileUser");
     return response.data;
   } catch (error) {
     throw handleApiError(error);

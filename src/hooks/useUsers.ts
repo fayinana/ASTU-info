@@ -1,7 +1,9 @@
 // import { assignTeacherResponsibilities as assignTeacherResponsibilitiesApi } from "@/api/auth";
 import { fetchUsers } from "@/api/user";
 import { GetUsersQuery } from "@/types/user";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { assignTeacherResponsibilities as assignTeacherResponsibilitiesApi } from "@/api/auth";
 // import { toast } from "sonner";
 
 export const useUsers = (query: GetUsersQuery = {}) => {
@@ -75,30 +77,30 @@ export const useUsers = (query: GetUsersQuery = {}) => {
 //   };
 // };
 
-// export const useAssignTeacherResponsibilities = () => {
-//   const queryClient = useQueryClient();
+export const useAssignTeacherResponsibilities = () => {
+  const queryClient = useQueryClient();
 
-//   const {
-//     mutate: assignTeacherResponsibilities,
-//     isPending: isLoading,
-//     error,
-//     reset,
-//   } = useMutation({
-//     mutationFn: assignTeacherResponsibilitiesApi,
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ["teachers"] });
-//       queryClient.invalidateQueries({ queryKey: ["users"] });
-//       toast.success("Responsibilities assigned successfully");
-//     },
-//     onError: (error) => {
-//       toast.error("Failed to assign responsibilities");
-//     },
-//   });
+  const {
+    mutate: assignTeacherResponsibilities,
+    isPending: isLoading,
+    error,
+    reset,
+  } = useMutation({
+    mutationFn: assignTeacherResponsibilitiesApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["teachers"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      toast.success("Responsibilities assigned successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to assign responsibilities");
+    },
+  });
 
-//   return {
-//     assignTeacherResponsibilities,
-//     isLoading,
-//     error,
-//     reset,
-//   };
-// };
+  return {
+    assignTeacherResponsibilities,
+    isLoading,
+    error,
+    reset,
+  };
+};
