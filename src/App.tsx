@@ -20,7 +20,7 @@ import AdminAnnouncements from "@/pages/admin/announcements/index";
 import AdminAnnouncementView from "@/pages/admin/announcements/[id]";
 import AdminAnnouncementNew from "@/pages/admin/announcements/new";
 // import AdminPosts from "@/pages/admin/Posts";
-// import AdminPostView from "@/pages/admin/posts/[id]";
+import AdminPostView from "@/pages/admin/posts/[id]";
 // import AdminAddPost from "@/pages/admin/posts/new"; // New import
 // import AdminProfile from "@/pages/admin/Profile";
 import AdminResources from "@/pages/admin/resource/Resources";
@@ -60,6 +60,8 @@ import { AuthProvider } from "./context/AuthContext";
 import AdminTeachers from "./pages/admin/teacher/Teachers";
 import AdminStudentSearch from "./pages/admin/students/StudentSearch";
 import AdminStudents from "./pages/admin/students/Students";
+import AdminAddPost from "./pages/admin/posts/new";
+import AdminPosts from "./pages/admin/posts/Posts";
 // import { AuthProvider } from "./context/useAuth";
 
 // Create a memoized Routes component to prevent unnecessary rerenders
@@ -86,7 +88,7 @@ const AppRoutes = memo(() => (
     {/* Update the route to the new dashboard page */}
     <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
 
-    {/* <Route
+    <Route
       path="/admin/posts"
       element={
         <ProtectedRoute>
@@ -95,8 +97,8 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
-    {/* <Route
+    />
+    <Route
       path="/admin/posts/:id"
       element={
         <ProtectedRoute>
@@ -105,9 +107,9 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
     {/* New route for add post page */}
-    {/* <Route
+    <Route
       path="/admin/posts/new"
       element={
         <ProtectedRoute>
@@ -116,7 +118,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
     <Route
       path="/admin/announcements"
       element={
@@ -168,17 +170,7 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
-    {/* New route for assign teacher responsibilities */}
-    {/* <Route
-      path="/admin/teachers/assign-responsibilities"
-      element={
-        <ProtectedRoute>
-          <RoleGuard allowedRoles={["admin"]}>
-            <TeacherResponsibilitiesAssignment />
-          </RoleGuard>
-        </ProtectedRoute>
-      }
-    /> */}
+   
     {/* New route for adding new admin */}
     {/* <Route
       path="/admin/users/add-admin"

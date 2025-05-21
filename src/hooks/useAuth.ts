@@ -21,11 +21,9 @@ export const useLogin = () => {
   } = useMutation({
     mutationFn: loginApi,
     onSuccess: (data: LoginResponse) => {
-      // setUser(data);
-      toast.success(`Welcome back, ${data?.name}!`);
       const redirectPath = `/${data?.role}/dashboard`;
-      localStorage.setItem("user", JSON.stringify(data));
       navigate(redirectPath);
+      toast.success(`Welcome back, ${data?.name}!`);
     },
     onError: (error: Error) => {
       toast.error(`Login failed: ${error.message}`);

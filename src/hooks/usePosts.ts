@@ -1,9 +1,10 @@
-import { fetchPosts } from "@/api/post";
+import { createPost as createPostApi, fetchPosts , fetchPost} from "@/api/post";
 import { GetPostsQuery } from "@/types/post";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export function usePosts(query: GetPostsQuery) {
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading, refetch , error } = useQuery({
     queryKey: [
       "posts",
       query.fields,
@@ -23,6 +24,34 @@ export function usePosts(query: GetPostsQuery) {
       total: 0,
       totalPages: 1,
     },
+    error,
+    isLoading,
+    refetch,
+  };
+}
+
+
+export function useCreatePost(){
+  const {mutate : createPost , isPending : isLoading , error } = useMutation({
+    mutationFn : createPostApi,
+    mutationKey : ["post"], 
+    onSuccess(data){
+      toast.success(data.message)
+    }
+  })
+  return {createPost , isLoading, error}
+}
+ 
+
+export function usePost(id: string) {
+  const { data, isLoading, refetch , error } = useQuery({
+    queryKey: ["post", id],
+    queryFn: () => fetchPost(id),
+  });
+
+  return {
+    post: data?.post || null,
+    error,
     isLoading,
     refetch,
   };

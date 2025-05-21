@@ -128,7 +128,7 @@ const AdminAnnouncementsPage = () => {
             isLoading={isLoading}
             onView={(row) => navigate(`/admin/announcements/${row._id}`)}
             onDelete={(row) => handleDelete(row._id)}
-            hideDelete={(row) => row.author._id !== user?.id}
+            hideDelete={(row) => row.author._id !== user?._id}
             searchable
             searchPlaceholder="Search announcements..."
             defaultSearchValue={filters.search}
@@ -139,7 +139,6 @@ const AdminAnnouncementsPage = () => {
             }}
             filters={filtersConfig}
             querySender={new ApiQuerySender()}
-            onSearch={(query) => handleFilterChange({ search: query })}
             onFilter={(field, value) => handleFilterChange({ [field]: value })}
             onClear={() => handleFilterChange({ search: "", role: "" })}
           />

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import PostsSection from "@/components/dashboard/PostsSection";
 import { useUsers } from "@/hooks/useUsers";
 import { usePosts } from "@/hooks/usePosts";
+import { useAnnouncementFilters } from "@/hooks/useAnnouncementFilters";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -14,9 +15,10 @@ const AdminDashboard = () => {
   const { users, isLoading: isLoadingUser } = useUsers({
     limit: 100,
   });
-  const { posts: announcements, isLoading: isLoadingAnnouncements } = usePosts({
-    initialFilters: { type: "announcement" },
-  });
+    const { filters, pagination, updateFilters, updatePagination, getQuery } =
+      useAnnouncementFilters();
+  
+  const { posts: announcements, isLoading: isLoadingAnnouncements } = usePosts(getQuery());
 
   const { posts, isLoading: isLoadingPosts } = usePosts({
     limit: 100,
