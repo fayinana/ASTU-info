@@ -31,6 +31,7 @@ export const createPost = async (data: CreatePostRequest) => {
     const formData = new FormData();
     formData.append("content", data.content);
     formData.append("title", data.title);
+    formData.append("type" , data.type)
     if (data.files) formData.append("files", data.files);
 
     const response = await apiClient.post<CreatePostResponse>(

@@ -47,16 +47,16 @@ interface User {
   section?: string;
   school?: string;
   department?: string;
-  studentID: string;
+  studentID?: string;
     secAssigned?: {
-    section: string;
-    subject: string;
-    department: string;
-    school: string;
+    section?: string;
+    subject?: string;
+    department?: string;
+    school?: string;
   }[];
   occupation?: string;
   title?: string;
-  createdAt : string
+  createdAt ?: string
 
 }
 
