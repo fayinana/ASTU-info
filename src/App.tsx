@@ -60,6 +60,11 @@ import { AuthProvider } from "./context/AuthContext";
 import AdminTeachers from "./pages/admin/teacher/Teachers";
 import AdminStudentSearch from "./pages/admin/students/StudentSearch";
 import AdminStudents from "./pages/admin/students/Students";
+import TeacherDashboard from "./pages/teacher/Dashboard";
+import TeacherPosts from "./pages/teacher/Posts";
+import TeacherInstructionalPosts from "./pages/teacher/InstructionalPosts";
+import TeacherPublicPosts from "./pages/teacher/PublicPosts";
+import TeacherResources from "./pages/teacher/Resources";
 // import { AuthProvider } from "./context/useAuth";
 
 // Create a memoized Routes component to prevent unnecessary rerenders
@@ -262,7 +267,7 @@ const AppRoutes = memo(() => (
     />
 
     {/* Teacher Routes */}
-    {/* <Route
+    <Route
       path="/teacher/dashboard"
       element={
         <ProtectedRoute>
@@ -271,8 +276,8 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
-    {/* <Route
+    />
+    <Route
       path="/teacher/posts"
       element={
         <ProtectedRoute>
@@ -281,8 +286,8 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
-    {/* <Route
+    />
+    <Route
       path="/teacher/instructional-posts"
       element={
         <ProtectedRoute>
@@ -291,8 +296,8 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
-    {/* <Route
+    />
+    <Route
       path="/teacher/public-posts"
       element={
         <ProtectedRoute>
@@ -301,7 +306,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
     {/* <Route
       path="/teacher/resources"
       element={

@@ -3,7 +3,7 @@ import { GetPostsQuery } from "@/types/post";
 import { useQuery } from "@tanstack/react-query";
 
 export function usePosts(query: GetPostsQuery) {
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading, refetch, error } = useQuery({
     queryKey: [
       "posts",
       query.fields,
@@ -11,6 +11,8 @@ export function usePosts(query: GetPostsQuery) {
       query.page,
       query.search,
       query.sort,
+      query.type,
+      query.author,
     ],
     queryFn: () => fetchPosts(query),
   });
@@ -25,5 +27,6 @@ export function usePosts(query: GetPostsQuery) {
     },
     isLoading,
     refetch,
+    error,
   };
 }

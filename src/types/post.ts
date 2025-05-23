@@ -79,6 +79,7 @@ interface GetPostsQuery {
   search?: string;
   sort?: string;
   fields?: string;
+  type?: "announcement" | "instructional" | "public" | "";
   [key: string]: any;
 }
 
