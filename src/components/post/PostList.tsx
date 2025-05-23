@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import PostCard from "@/components/post/PostCard";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Search, PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ import { PostListSkeleton } from "@/components/skeletons/PostListSkeleton";
 import { Post } from "@/types/post";
 
 interface PostListProps {
-  defaultType?: string;
+  defaultType?: "my-posts" | "instructional" | "public" | "all";
   showFilters?: boolean;
   showTabs?: boolean;
   showCreateButton?: boolean;
@@ -30,56 +30,42 @@ export const PostList = ({
 }: PostListProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<string>(defaultType);
+  const [activeTab, setActiveTab] = useState<
+    "my-posts" | "instructional" | "public" | "all"
+  >(defaultType);
   const [localSearch, setLocalSearch] = useState("");
 
   // Memoize filters to prevent unnecessary rerenders
   const initialFilters = useMemo(() => {
     const filters: Record<string, any> = {};
-
-    // Set type filter if not 'all'
     if (activeTab !== "all") {
       filters.type = activeTab;
     }
-
-    // Set authorId filter if authorOnly is true
     if (authorOnly && user?._id) {
-      filters.authorId = user._id;
+      filters.author = user._id || "";
     }
-
     return filters;
   }, [activeTab, authorOnly, user?._id]);
 
+  console.log("PostList filters:", initialFilters);
   // Fetch posts based on filters
   const {
     posts,
     isLoading,
+    pagination,
     error: isError,
-    setSearch,
-    setFilter,
-  } = usePosts({
-    initialFilters,
-  });
+  } = usePosts(initialFilters);
 
   // Handle search input changes with debounce
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearch(localSearch || null);
-    }, 300);
+    const timer = setTimeout(() => {}, 300);
 
     return () => clearTimeout(timer);
-  }, [localSearch, setSearch]);
+  }, [localSearch]);
 
   // Handle tab changes
   const handleTabChange = (value: string) => {
-    setActiveTab(value);
-
-    // Update type filter based on tab
-    if (value !== "all") {
-      setFilter("type", value);
-    } else {
-      setFilter("type", null);
-    }
+    setActiveTab(value as "my-posts" | "instructional" | "public" | "all");
   };
 
   return (

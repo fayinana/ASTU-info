@@ -6,6 +6,7 @@ import StatusBadge from "@/components/tables/StatusBadge";
 import { Heart, MessageSquare } from "lucide-react";
 import { Post } from "@/types/post";
 import { Avatar } from "@/components/user/Avatar";
+import { useAuth } from "@/context/AuthContext";
 
 interface PostsSectionProps {
   posts: Post[];
@@ -14,7 +15,7 @@ interface PostsSectionProps {
 
 const PostsSection: React.FC<PostsSectionProps> = ({ posts, isLoading }) => {
   const navigate = useNavigate();
-
+  const { user } = useAuth();
   const columns = [
     {
       header: "Title",
@@ -95,7 +96,16 @@ const PostsSection: React.FC<PostsSectionProps> = ({ posts, isLoading }) => {
           data={posts}
           isLoading={isLoading}
           onView={(row) => navigate(`/admin/posts/${row._id}`)}
+          onDelete={(row) => {
+            if (user._id === row.author._id) {
+              return null;
+            } else {
+              // Handle delete action
+              console.log("Delete post:", row);
+            }
+          }}
           searchPlaceholder="Search posts..."
+          querySender={() => {}} // Provide a no-op function or replace with actual logic if needed
         />
       </CardContent>
     </Card>
