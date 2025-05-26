@@ -1,8 +1,5 @@
-import FileUploader from "@/components/form/FileUploader";
-import { InputField } from "@/components/form/InputField";
-import { TextareaField } from "@/components/form/TextareaField";
+import { useState, useRef } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { LoadingOverlay } from "@/components/modals/LoadingOverlay";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,104 +8,205 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
-import { useCreateAnnouncement } from "@/hooks/useAnnouncements";
-import { AnnouncementFormValues, announcementSchema } from "@/lib/zodSchemas";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { FileUploader } from "@/components/form/FileUploader";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useCreatePost } from "@/hooks/usePosts";
 import { CreatePostRequest } from "@/types/post";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 
-const TeacherCreatePost = () => {
-  const navigate = useNavigate();
-  const form = useForm<AnnouncementFormValues>({
-    resolver: zodResolver(announcementSchema),
-    defaultValues: {
-      title: "",
-      content: "",
-      file: null,
-    },
-  });
-  const { createAnnouncment, isLoading: isCreatingAnauncment } =
-    useCreateAnnouncement();
-  const onSubmit = async (values: CreatePostRequest) => {
-    values.type = "announcement";
-    createAnnouncment(values);
-  };
+export default function AdminAddPost() {
+  const [postType, setPostType] = useState<
+    "announcement" | "instructional" | "public"
+  >("announcement");
+  const [files, setFiles] = useState<File[]>([]);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
+  const [school, setSchool] = useState<string>("");
+  const [department, setDepartment] = useState<string>("");
+  const [batch, setBatch] = useState<string>("");
+  const [section, setSection] = useState<string>("");
+
+  const { createPost, error, isLoading } = useCreatePost();
+
+  function handleCreatePost(e: React.FormEvent) {
+    e.preventDefault();
+
+    const data: CreatePostRequest = {
+      content: contentRef.current?.value || "",
+      title: postType === "public" ? titleRef.current?.value || "" : "",
+      files: files[0], // Assuming only one file for simplicity; adjust if multiple files are needed
+      type: postType,
+    };
+
+    // For instructional posts, append additional fields if needed
+    if (postType === "instructional") {
+      const instructionalData = {
+        ...data,
+        school,
+        department,
+        batch,
+        section,
+      };
+      createPost(instructionalData);
+    } else {
+      createPost(data);
+    }
+  }
 
   return (
-    <LoadingOverlay message="Creating..." isLoading={isCreatingAnauncment}>
-      <AppLayout
-        title="Create Announcement"
-        breadcrumbs={[
-          { label: "Dashboard", href: "/teacher/dashboard" },
-          { label: "Posts", href: "/teacher/posts" },
-          { label: "Create" },
-        ]}
-        allowedRoles={["teacher"]}
-      >
-        <div className="max-w-3xl mx-auto">
-          <Card>
+    <AppLayout
+      title="Add New Post"
+      breadcrumbs={[
+        { label: "Dashboard", href: "/teacher/dashboard" },
+        { label: "Posts", href: "/teacher/posts" },
+        { label: "Add New Post", href: "/teacher/posts/new" },
+      ]}
+      allowedRoles={["teacher"]}
+    >
+      <div className="container mx-auto py-6">
+        <Card className="max-w-4xl mx-auto">
+          <form onSubmit={handleCreatePost}>
             <CardHeader>
-              <CardTitle>Create New Announcement</CardTitle>
+              <CardTitle>Create New Post</CardTitle>
             </CardHeader>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <CardContent className="space-y-4">
-                  <InputField
-                    label="Title"
-                    name="title"
-                    control={form.control}
-                    placeholder="Enter announcement title"
-                    required
-                  />
+            <CardContent className="space-y-6">
+              {/* Post Type Selection */}
+              <div className="space-y-2">
+                <Label>Post Type</Label>
+                <RadioGroup
+                  defaultValue="public"
+                  className="flex flex-wrap gap-4"
+                  onValueChange={(value) =>
+                    setPostType(value as "announcement" | "public")
+                  }
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="instructional" id="instructional" />
+                    <Label htmlFor="instructional">Instructional</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="public" id="public" />
+                    <Label htmlFor="public">Public</Label>
+                  </div>
+                </RadioGroup>
+              </div>
 
-                  <TextareaField
-                    label="Content"
-                    name="content"
-                    control={form.control}
-                    placeholder="Enter announcement content"
-                    rows={5}
-                    required
-                  />
+              {/* Content */}
+              <div className="space-y-2">
+                <Label htmlFor="content">Content</Label>
+                <Textarea
+                  id="content"
+                  placeholder="Enter post content"
+                  className="min-h-[150px]"
+                  ref={contentRef}
+                />
+              </div>
 
-                  <Controller
-                    control={form.control}
-                    name="file"
-                    render={({ field: { onChange, value } }) => (
-                      <FileUploader
-                        label="Upload File"
-                        onChange={(files) => onChange(files[0])} // Only single file expected
-                        value={value ? [value] : []} // FileUploader expects an array
-                        maxFiles={1}
-                        acceptedFileTypes={["image/*", "application/pdf"]} // customize as needed
-                        description="Upload a PDF or image file (max 5MB)"
-                      />
-                    )}
-                  />
-                </CardContent>
+              {/* Target audience (for instructional posts) */}
+              {postType === "instructional" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="school">School</Label>
+                    <Select value={school} onValueChange={setSchool}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select school" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="sos">School of Science</SelectItem>
+                        <SelectItem value="soe">
+                          School of Engineering
+                        </SelectItem>
+                        <SelectItem value="soc">School of Computing</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="department">Department</Label>
+                    <Select value={department} onValueChange={setDepartment}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select department" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="cs">Computer Science</SelectItem>
+                        <SelectItem value="it">
+                          Information Technology
+                        </SelectItem>
+                        <SelectItem value="se">Software Engineering</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="batch">Batch</Label>
+                    <Select value={batch} onValueChange={setBatch}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select batch" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="2020">2020</SelectItem>
+                        <SelectItem value="2021">2021</SelectItem>
+                        <SelectItem value="2022">2022</SelectItem>
+                        <SelectItem value="2023">2023</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="section">Section</Label>
+                    <Select value={section} onValueChange={setSection}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select section" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="a">Section A</SelectItem>
+                        <SelectItem value="b">Section B</SelectItem>
+                        <SelectItem value="c">Section C</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              )}
 
-                <CardFooter className="flex justify-between">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => navigate("/admin/announcements")}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={isCreatingAnauncment}>
-                    {isCreatingAnauncment
-                      ? "Creating..."
-                      : "Create Announcement"}
-                  </Button>
-                </CardFooter>
-              </form>
-            </Form>
-          </Card>
-        </div>
-      </AppLayout>
-    </LoadingOverlay>
+              {/* File upload */}
+              <div className="space-y-2">
+                <Label>Attachments (Optional)</Label>
+                <FileUploader
+                  onChange={(selectedFiles) => setFiles(selectedFiles)}
+                  maxFiles={5}
+                  maxSize={10 * 1024 * 1024} // 10MB
+                  acceptedFileTypes={[
+                    "application/pdf",
+                    "image/jpeg",
+                    "image/png",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                  ]}
+                />{" "}
+                {files.length > 0 && (
+                  <div className="text-sm text-muted-foreground mt-1">
+                    {files.length} file(s) selected
+                  </div>
+                )}
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-end space-x-4">
+              <Button variant="outline" onClick={() => window.history.back()}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? "Creating..." : "Create Post"}
+              </Button>
+            </CardFooter>
+          </form>
+        </Card>
+      </div>
+    </AppLayout>
   );
-};
-
-export default TeacherCreatePost;
+}
