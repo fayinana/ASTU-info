@@ -1,52 +1,41 @@
-
 import { useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DataTable } from "@/components/tables/DataTable";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/lib/apiHelper";
-import { BasicUserInfo, FilterStudentsResponse } from "@/types/user";
 import { StudentsPageSkeleton } from "@/components/skeletons/PageSkeletons";
 import { Search } from "lucide-react";
-import { formatDate } from "@/lib/utils";
+import { useUsers } from "@/hooks/useUsers";
+import { useAuth } from "@/context/AuthContext";
+import { User } from "@/types/user";
+import { LoadingOverlay } from "@/components/modals/LoadingOverlay";
 
 const TeacherStudents = () => {
   const [department, setDepartment] = useState("");
   const [batch, setBatch] = useState("");
   const [section, setSection] = useState("");
   const [search, setSearch] = useState("");
-
-  // Get students for the teacher's section
-  const { data: studentsData, isLoading, refetch } = useQuery<FilterStudentsResponse>({
-    queryKey: ["students", { department, batch, section, search }],
-    queryFn: async () => {
-      const response = await apiClient.post("/users/fetchBySection", {
-        department,
-        batch,
-        section,
-        search
-      });
-      return response.data;
-    }
-  });
-
-  // Get teacher's sections for the filter
-  const { data: teacherData } = useQuery({
-    queryKey: ["teacher-sections"],
-    queryFn: async () => {
-      const response = await apiClient.get("/users/teacherFiltering");
-      return response.data;
-    }
+  const { user } = useAuth();
+  const { users, isLoading, pagination, error, refetch } = useUsers({
+    role: "student",
+    section: user.secAssigned.map((sec) => sec.section),
+    department: user.secAssigned.map((sec) => sec.department),
   });
 
   const columns = [
     {
       header: "Student Name",
       accessorKey: "name",
-      cell: (row: BasicUserInfo) => (
+      cell: (row: User) => (
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-sm font-medium">
             {row.name.substring(0, 2).toUpperCase()}
@@ -56,7 +45,7 @@ const TeacherStudents = () => {
             <p className="text-xs text-muted-foreground">{row.email}</p>
           </div>
         </div>
-      )
+      ),
     },
     {
       header: "Batch",
@@ -73,28 +62,31 @@ const TeacherStudents = () => {
     {
       accessorKey: "_id",
       header: "Actions",
-      cell: (row: BasicUserInfo) => (
-        <Button 
-          variant="outline" 
+      cell: (row: User) => (
+        <Button
+          variant="outline"
           size="sm"
-          onClick={() => window.open(`/student/${row._id}`, '_blank')}
+          onClick={() => window.open(`/student/${row._id}`, "_blank")}
         >
           View Details
         </Button>
-      )
+      ),
     },
   ];
-
-  if (isLoading) {
-    return <StudentsPageSkeleton />;
-  }
+  if (isLoading)
+    return (
+      <AppLayout>
+        <StudentsPageSkeleton />
+      </AppLayout>
+    );
 
   return (
-    <AppLayout 
-      title="Students" 
+    // <LoadingOverlay isLoading={isLoading} message="Loading students...">
+    <AppLayout
+      title="Students"
       breadcrumbs={[
         { label: "Dashboard", href: "/teacher/dashboard" },
-        { label: "Students" }
+        { label: "Students" },
       ]}
       allowedRoles={["teacher"]}
     >
@@ -110,8 +102,10 @@ const TeacherStudents = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Students</CardTitle>
-              <p className="text-3xl font-bold">{studentsData?.data?.length || 0}</p>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Total Students
+              </CardTitle>
+              <p className="text-3xl font-bold">{users?.length || 0}</p>
             </CardHeader>
             <CardContent>
               <p className="text-xs text-muted-foreground">
@@ -119,11 +113,15 @@ const TeacherStudents = () => {
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Active Sections</CardTitle>
-              <p className="text-3xl font-bold">{teacherData?.sectionsCount || 0}</p>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Active Sections
+              </CardTitle>
+              <p className="text-3xl font-bold">
+                {user.secAssigned.length || 0}
+              </p>
             </CardHeader>
             <CardContent>
               <p className="text-xs text-muted-foreground">
@@ -131,11 +129,15 @@ const TeacherStudents = () => {
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Department</CardTitle>
-              <p className="text-3xl font-bold">{teacherData?.departmentsCount || 0}</p>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Department
+              </CardTitle>
+              <p className="text-3xl font-bold">
+                {user.secAssigned.length || 0}
+              </p>
             </CardHeader>
             <CardContent>
               <p className="text-xs text-muted-foreground">
@@ -156,29 +158,33 @@ const TeacherStudents = () => {
                     <SelectValue placeholder="All Departments" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Departments</SelectItem>
-                    {teacherData?.departments?.map((dept: string) => (
-                      <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                    <SelectItem value="all">All Departments</SelectItem>
+                    {user.secAssigned?.map((sec) => (
+                      <SelectItem key={sec.department} value={sec.department}>
+                        {sec.department}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-              
-              <div className="space-y-2 flex-1">
-                <p className="text-sm font-medium">Batch</p>
+
+              {/* <div className="space-y-2 flex-1">
+                <p className="text-sm font-medium">Depatment</p>
                 <Select value={batch} onValueChange={setBatch}>
                   <SelectTrigger>
                     <SelectValue placeholder="All Batches" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">All Batches</SelectItem>
-                    {teacherData?.batches?.map((b: string) => (
-                      <SelectItem key={b} value={b}>{b}</SelectItem>
+                  {/* <SelectContent> 
+                  <SelectItem value="">All Batches</SelectItem>
+                    {user.secAssigned.map((b) => (
+                      <SelectItem key={b} value={b.}>
+                        {b}
+                      </SelectItem>
                     ))}
-                  </SelectContent>
+                  </SelectContent> 
                 </Select>
-              </div>
-              
+              </div> */}
+
               <div className="space-y-2 flex-1">
                 <p className="text-sm font-medium">Section</p>
                 <Select value={section} onValueChange={setSection}>
@@ -186,9 +192,11 @@ const TeacherStudents = () => {
                     <SelectValue placeholder="All Sections" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Sections</SelectItem>
-                    {teacherData?.sections?.map((s: string) => (
-                      <SelectItem key={s} value={s}>{s}</SelectItem>
+                    <SelectItem value="all">All Sections</SelectItem>
+                    {user.secAssigned.map((s) => (
+                      <SelectItem key={s.section} value={s.section}>
+                        {s.section}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -211,8 +219,8 @@ const TeacherStudents = () => {
                     onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="ml-2"
                   onClick={() => {
                     setDepartment("");
@@ -223,8 +231,8 @@ const TeacherStudents = () => {
                 >
                   Reset
                 </Button>
-                <Button 
-                  variant="default" 
+                <Button
+                  variant="default"
                   className="ml-2"
                   onClick={() => refetch()}
                 >
@@ -234,14 +242,15 @@ const TeacherStudents = () => {
             </div>
             <DataTable
               columns={columns}
-              data={studentsData?.data || []}
-              perPage={10}
-              searchKey="name"
+              data={users || []}
+              value={search}
+              querySender={refetch}
             />
           </CardContent>
         </Card>
       </div>
     </AppLayout>
+    // </LoadingOverlay>
   );
 };
 

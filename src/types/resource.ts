@@ -62,7 +62,7 @@ interface ResourceCreationRequest {
   school: string;
   department: string;
   course?: string;
-  year?: number;
+  year?: number | string;
   files: File[];
 }
 

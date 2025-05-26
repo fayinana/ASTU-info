@@ -67,6 +67,10 @@ import TeacherDashboard from "./pages/teacher/Dashboard";
 import TeacherPosts from "./pages/teacher/Posts";
 import TeacherInstructionalPosts from "./pages/teacher/InstructionalPosts";
 import TeacherPublicPosts from "./pages/teacher/PublicPosts";
+import TeacherResources from "./pages/teacher/Resources";
+import UploadResource from "./pages/teacher/UploadReacourse";
+import TeacherStudents from "./pages/teacher/Students";
+import TeacherCreatePost from "./pages/teacher/public-posts/Create";
 // import { AuthProvider } from "./context/useAuth";
 
 // Create a memoized Routes component to prevent unnecessary rerenders
@@ -299,7 +303,7 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
-    {/* <Route
+    <Route
       path="/teacher/resources"
       element={
         <ProtectedRoute>
@@ -308,8 +312,18 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
-    {/* <Route
+    />
+    <Route
+      path="/teacher/upload-resource"
+      element={
+        <ProtectedRoute>
+          <RoleGuard allowedRoles={["teacher"]}>
+            <UploadResource />
+          </RoleGuard>
+        </ProtectedRoute>
+      }
+    />
+    <Route
       path="/teacher/students"
       element={
         <ProtectedRoute>
@@ -318,7 +332,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
     {/* <Route
       path="/teacher/profile"
       element={
@@ -329,26 +343,16 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     /> */}
-    {/* <Route
-      path="/teacher/public-posts/create"
+    <Route
+      path="/teacher/posts/new"
       element={
         <ProtectedRoute>
           <RoleGuard allowedRoles={["teacher"]}>
-            <TeacherCreatePublic />
+            <TeacherCreatePost />
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
-    {/* <Route
-      path="/teacher/instructional-posts/create"
-      element={
-        <ProtectedRoute>
-          <RoleGuard allowedRoles={["teacher"]}>
-            <TeacherCreateInstructional />
-          </RoleGuard>
-        </ProtectedRoute>
-      }
-    /> */}
+    />
 
     {/* Student Routes */}
     {/* <Route

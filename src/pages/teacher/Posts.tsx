@@ -105,12 +105,6 @@ const TeacherPosts = () => {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => navigate("/teacher/instructional-posts/create")}
-            >
-              Create Instructional
-            </Button>
             <Button onClick={() => navigate("/teacher/public-posts/create")}>
               <PlusCircle className="mr-2 h-4 w-4" />
               Create Public

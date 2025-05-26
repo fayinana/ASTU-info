@@ -233,7 +233,6 @@ const AdminResources = () => {
                   }}
                   filters={filtersConfig}
                   querySender={new ApiQuerySender()}
-                  onSearch={(query) => handleFilterChange({ search: query })}
                   onFilter={(field, value) =>
                     handleFilterChange({ [field]: value })
                   }
