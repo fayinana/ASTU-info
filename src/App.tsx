@@ -63,6 +63,10 @@ import AdminStudents from "./pages/admin/students/Students";
 
 import AdminAddPost from "./pages/admin/posts/new";
 import AdminPosts from "./pages/admin/posts/Posts";
+import TeacherDashboard from "./pages/teacher/Dashboard";
+import TeacherPosts from "./pages/teacher/Posts";
+import TeacherInstructionalPosts from "./pages/teacher/InstructionalPosts";
+import TeacherPublicPosts from "./pages/teacher/PublicPosts";
 // import { AuthProvider } from "./context/useAuth";
 
 // Create a memoized Routes component to prevent unnecessary rerenders
