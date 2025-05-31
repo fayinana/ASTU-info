@@ -17,20 +17,11 @@ import useAppToast from "@/hooks/useAppToast";
 import { useAuth } from "@/context/AuthContext";
 import { ProfileFormValues } from "@/lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Shield, User as UserIcon } from "lucide-react";
+import { FileEdit, LogIn, Shield, User as UserIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useUpdateProfile } from "@/hooks/useUsers";
-import { MapPin } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
 // Password change form schema
 const passwordFormSchema = z
@@ -82,10 +73,10 @@ const AdminProfile = () => {
     <AppLayout
       title="Profile"
       breadcrumbs={[
-        { label: "Dashboard", href: "/teacher/dashboard" },
+        { label: "Dashboard", href: "/admin/dashboard" },
         { label: "Profile" },
       ]}
-      allowedRoles={["teacher"]}
+      allowedRoles={["admin"]}
     >
       <div className="space-y-6">
         <div className="flex items-center justify-start">
@@ -212,38 +203,6 @@ const AdminProfile = () => {
             </Tabs>
           </div>
         </div>
-        {user.secAssigned && user.secAssigned.length > 0 && (
-          <Card className="mt-6">
-            <CardHeader>
-              <div className="flex items-center text-muted-foreground">
-                <MapPin className="h-5 w-5 mr-2" />
-                <h3 className="text-lg font-medium">Assignments</h3>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>School</TableHead>
-                    <TableHead>Department</TableHead>
-                    <TableHead>Subject</TableHead>
-                    <TableHead>Section</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {user.secAssigned.map((assignment) => (
-                    <TableRow key={assignment._id}>
-                      <TableCell>{assignment.school}</TableCell>
-                      <TableCell>{assignment.department}</TableCell>
-                      <TableCell>{assignment.subject}</TableCell>
-                      <TableCell>{assignment.section}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        )}
       </div>
     </AppLayout>
   );
