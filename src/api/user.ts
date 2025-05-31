@@ -31,6 +31,7 @@ export const fetchUser = async (id: string) => {
 export const updateProfile = async ({id , data}: {id: string, data: ProfileUpdateRequest}) => {
   try {
     const formData = new FormData();
+    console.log("Updating profile with data:", data);
     Object.entries(data).forEach(([key, value]) => {
       if (value !== undefined) {
         formData.append(key, value);

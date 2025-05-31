@@ -68,10 +68,9 @@ const AdminProfile = () => {
   };
 
   const handlePasswordChange = (data: PasswordFormValues) => {
-    console.log("Password change:", data);
-    success({
-      title: "Password Changed",
-      description: "Your password has been changed successfully.",
+    updateUserProfile({
+      id: user._id,
+      data: { password: data.newPassword },
     });
     passwordForm.reset();
     // In a real app, this would call an API to change the password
