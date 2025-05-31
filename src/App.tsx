@@ -48,7 +48,7 @@ import UploadReacourse from "@/pages/admin/resource/UploadReacourse";
 // // Student pages
 // import StudentDashboard from "@/pages/student/Dashboard";
 import StudentPosts from "@/pages/student/Posts";
-// import StudentProfile from "@/pages/student/Profile";
+import StudentProfile from "@/pages/student/Profile";
 import StudentCreatePublic from "@/pages/student/public-posts/Create";
 import StudentPublicPosts from "@/pages/student/PublicPosts";
 // import StudentResources from "@/pages/student/Resources";
@@ -73,6 +73,8 @@ import UploadResource from "./pages/teacher/UploadReacourse";
 import TeacherStudents from "./pages/teacher/Students";
 import TeacherCreatePost from "./pages/teacher/public-posts/Create";
 import StudentDashboard from "./pages/student/Dashboard";
+import AdminProfile from "./pages/admin/profile/Profile";
+import TeacherProfile from "./pages/teacher/Profile";
 // import StudentResources from "./components/student/StudentResources";
 // import StudentPosts from "./components/student/StudentPosts";
 // import { AuthProvider } from "./context/useAuth";
@@ -235,7 +237,7 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
-    {/* <Route
+    <Route
       path="/admin/profile"
       element={
         <ProtectedRoute>
@@ -244,7 +246,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
 
     <Route
       path="/admin/upload-resource"
@@ -328,7 +330,7 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
-    {/* <Route
+    <Route
       path="/teacher/profile"
       element={
         <ProtectedRoute>
@@ -337,7 +339,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
     <Route
       path="/teacher/posts/new"
       element={
@@ -390,7 +392,7 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
-    {/* <Route
+    <Route
       path="/student/profile"
       element={
         <ProtectedRoute>
@@ -399,7 +401,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    /> */}
+    />
     <Route
       path="/student/public-posts/new"
       element={

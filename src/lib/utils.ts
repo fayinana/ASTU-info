@@ -9,6 +9,11 @@ export function cn(...inputs: ClassValue[]) {
 export function formatDate(dateString: string | number | Date): string {
   const date = new Date(dateString);
 
+  if (isNaN(date.getTime())) {
+    console.warn("Invalid date passed to formatDate:", dateString);
+    return "Invalid Date";
+  }
+
   // Format: Month DD, YYYY
   return new Intl.DateTimeFormat("en-US", {
     month: "long",
@@ -16,6 +21,7 @@ export function formatDate(dateString: string | number | Date): string {
     year: "numeric",
   }).format(date);
 }
+
 
 export function formatDateTime(dateString: string | number | Date): string {
   const date = new Date(dateString);

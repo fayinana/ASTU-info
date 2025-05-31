@@ -28,7 +28,7 @@ export const fetchUser = async (id: string) => {
 };
 
 // Update profile
-export const updateProfile = async (id: string, data: ProfileUpdateRequest) => {
+export const updateProfile = async ({id , data}: {id: string, data: ProfileUpdateRequest}) => {
   try {
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
@@ -37,7 +37,7 @@ export const updateProfile = async (id: string, data: ProfileUpdateRequest) => {
       }
     });
     const response = await apiClient.put<ProfileUpdateResponse>(
-      `/users/${id}`,
+      `/users/profileUpdate/${id}`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },

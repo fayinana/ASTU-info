@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Avatar } from "./Avatar";
 import { User } from "@/lib/types";
 import { ProfileFormValues, profileSchema } from "@/lib/zodSchemas";
@@ -43,7 +48,7 @@ export const ProfileForm = ({
       occupation: user.occupation || "",
     },
   });
-  
+
   const handleSubmit = (data: ProfileFormValues) => {
     onSubmit(data);
   };
@@ -58,7 +63,10 @@ export const ProfileForm = ({
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6"
+          >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -73,7 +81,7 @@ export const ProfileForm = ({
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="email"
@@ -94,7 +102,7 @@ export const ProfileForm = ({
                 )}
               />
             </div>
-            
+
             <FormField
               control={form.control}
               name="bio"
@@ -112,10 +120,10 @@ export const ProfileForm = ({
                 </FormItem>
               )}
             />
-            
+            {/* 
             {user.role === "admin" || user.role === "teacher" ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> */}
+            {/* <FormField
                   control={form.control}
                   name="department"
                   render={({ field }) => (
@@ -127,9 +135,9 @@ export const ProfileForm = ({
                       <FormMessage />
                     </FormItem>
                   )}
-                />
-                
-                <FormField
+                /> */}
+
+            {/* <FormField
                   control={form.control}
                   name="title"
                   render={({ field }) => (
@@ -142,8 +150,8 @@ export const ProfileForm = ({
                     </FormItem>
                   )}
                 />
-              </div>
-            ) : (
+              </div> */}
+            {/* ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -158,7 +166,7 @@ export const ProfileForm = ({
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="school"
@@ -172,7 +180,7 @@ export const ProfileForm = ({
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="batch"
@@ -186,7 +194,7 @@ export const ProfileForm = ({
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="section"
@@ -201,8 +209,8 @@ export const ProfileForm = ({
                   )}
                 />
               </div>
-            )}
-            
+            )} */}
+
             <CardFooter className="px-0 pt-4">
               <Button
                 type="submit"

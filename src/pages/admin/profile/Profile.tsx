@@ -74,10 +74,10 @@ const AdminProfile = () => {
     <AppLayout
       title="Profile"
       breadcrumbs={[
-        { label: "Dashboard", href: "/student/dashboard" },
+        { label: "Dashboard", href: "/admin/dashboard" },
         { label: "Profile" },
       ]}
-      allowedRoles={["student"]}
+      allowedRoles={["admin"]}
     >
       <div className="space-y-6">
         <div className="flex items-center justify-start">

@@ -1,9 +1,10 @@
 // import { assignTeacherResponsibilities as assignTeacherResponsibilitiesApi } from "@/api/auth";
-import { fetchUsers } from "@/api/user";
+import { fetchUsers, updateProfile as updateUserProfileApi } from "@/api/user";
 import { GetUsersQuery } from "@/types/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { assignTeacherResponsibilities as assignTeacherResponsibilitiesApi } from "@/api/auth";
+
 // import { toast } from "sonner";
 
 export const useUsers = (query: GetUsersQuery = {}) => {
@@ -50,32 +51,32 @@ export const useUsers = (query: GetUsersQuery = {}) => {
 // //   });
 // // };
 
-// export const useUpdateProfile = () => {
-//   const queryClient = useQueryClient();
+export const useUpdateProfile = () => {
+  const queryClient = useQueryClient();
 
-//   const {
-//     mutate: updateUserProfile,
-//     isPending: isLoading,
-//     error,
-//     reset,
-//   } = useMutation({
-//     mutationFn: updateUserProfileApi,
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ["user"] });
-//       toast.success("Profile updated successfully");
-//     },
-//     onError: (error) => {
-//       toast.error("Failed to update profile");
-//     },
-//   });
+  const {
+    mutate: updateUserProfile,
+    isPending: isLoading,
+    error,
+    reset,
+  } = useMutation({
+    mutationFn: updateUserProfileApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      toast.success("Profile updated successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to update profile");
+    },
+  });
 
-//   return {
-//     updateUserProfile,
-//     isLoading,
-//     error,
-//     reset,
-//   };
-// };
+  return {
+    updateUserProfile,
+    isLoading,
+    error,
+    reset,
+  };
+};
 
 export const useAssignTeacherResponsibilities = () => {
   const queryClient = useQueryClient();

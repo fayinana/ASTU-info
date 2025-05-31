@@ -1,10 +1,15 @@
-import { User } from "@/lib/types";
+import { User } from "@/types/user";
 import { Avatar } from "./Avatar";
 import { RoleBadge } from "./RoleBadge";
 import { formatDate } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import {
   BookOpen,
   Calendar,
@@ -13,7 +18,7 @@ import {
   School,
   User as UserIcon,
 } from "lucide-react";
-import StatusBadge from "../../../../role-based-education-sphere/src/components/tables/StatusBadge";
+import StatusBadge from "@/components/tables/StatusBadge";
 
 interface UserProfileDetailsProps {
   user: User;
@@ -36,7 +41,7 @@ export function UserProfileDetails({
         >
           {compact ? (
             <>
-              <Avatar user={user} size={compact ? "md" : "xl"} />
+              <Avatar user={user} size="md" />
               <div className="space-y-1">
                 <CardTitle className="flex items-center">{user.name}</CardTitle>
                 <div className="flex items-center space-x-2">
@@ -75,7 +80,7 @@ export function UserProfileDetails({
                 <UserIcon className="h-4 w-4 mr-2" />
                 <span>Username</span>
               </div>
-              <span className="font-medium">{user.username}</span>
+              <span className="font-medium">{user.name}</span>
             </div>
 
             {user.department && (
@@ -98,6 +103,49 @@ export function UserProfileDetails({
               </div>
             )}
 
+            {/* {user.secAssigned && user.secAssigned.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center text-muted-foreground">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  <span>Assignments</span>
+                </div>
+
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-sm"
+                    >
+                      View Assignments
+                    </Button>
+                  </PopoverTrigger>
+
+                  <PopoverContent className="w-full max-w-3xl p-4 rounded-md shadow-lg border space-y-2 overflow-x-auto">
+                   
+                    <div className="grid grid-cols-4 font-semibold text-muted-foreground text-xs border-b pb-2">
+                      <span>School</span>
+                      <span>Department</span>
+                      <span>Subject</span>
+                      <span>Section</span>
+                    </div>
+
+                 
+                    {user.secAssigned.map((assignment) => (
+                      <div
+                        key={assignment._id}
+                        className="grid grid-cols-4 gap-4 text-sm text-gray-700 py-1 border-b last:border-none"
+                      >
+                        <span>{assignment.school}</span>
+                        <span>{assignment.department}</span>
+                        <span>{assignment.subject}</span>
+                        <span>{assignment.section}</span>
+                      </div>
+                    ))}
+                  </PopoverContent>
+                </Popover>
+              </div>
+            )} */}
+
             {(user.batch || user.section) && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-muted-foreground">
@@ -119,14 +167,18 @@ export function UserProfileDetails({
                 <Calendar className="h-4 w-4 mr-2" />
                 <span>Joined</span>
               </div>
-              <span className="font-medium">{formatDate(user.createdAt)}</span>
+              <span className="font-medium">
+                {user?.createdAt
+                  ? formatDate(user.createdAt)
+                  : "Date not available"}
+              </span>
             </div>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center text-muted-foreground">
                 <span>Status</span>
               </div>
-              <StatusBadge status={user.isApproved ? "Approved" : "Pending"} />
+              <StatusBadge status={user.status ? "Approved" : "Pending"} />
             </div>
           </div>
         </div>
