@@ -10,8 +10,8 @@ import { Avatar } from "./Avatar";
 import { RoleBadge } from "./RoleBadge";
 import { formatDate } from "@/lib/utils";
 import { User } from "@/types/user";
-import { TableActions } from "../../../../role-based-education-sphere/src/components/tables/TableActions";
-import StatusBadge from "../../../../role-based-education-sphere/src/components/tables/StatusBadge";
+import { TableActions } from "@/components/tables/TableActions";
+import StatusBadge from "@/components/tables/StatusBadge";
 
 // Create a namespace for UserCard to hold Avatar component
 const UserCardAvatar = ({
