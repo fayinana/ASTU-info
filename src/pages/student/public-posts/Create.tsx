@@ -70,7 +70,7 @@ export default function AdminAddPost() {
         { label: "Posts", href: "/teacher/posts" },
         { label: "Add New Post", href: "/teacher/posts/new" },
       ]}
-      allowedRoles={["teacher"]}
+      allowedRoles={["student"]}
     >
       <div className="container mx-auto py-6">
         <Card className="max-w-4xl mx-auto">
@@ -85,14 +85,8 @@ export default function AdminAddPost() {
                 <RadioGroup
                   defaultValue="public"
                   className="flex flex-wrap gap-4"
-                  onValueChange={(value) =>
-                    setPostType(value as "announcement" | "public")
-                  }
+                  onValueChange={(value) => setPostType(value as "public")}
                 >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="instructional" id="instructional" />
-                    <Label htmlFor="instructional">Instructional</Label>
-                  </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="public" id="public" />
                     <Label htmlFor="public">Public</Label>
