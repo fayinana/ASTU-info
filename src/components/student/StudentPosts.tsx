@@ -9,6 +9,7 @@ import PostCard from "@/components/post/PostCard";
 import { PostListSkeleton } from "@/components/skeletons/PostListSkeleton";
 import { useAuth } from "@/context/AuthContext";
 import { adaptApiPostToAppPost } from "@/lib/typeAdapters";
+import { access } from "fs";
 
 interface StudentPostsProps {
   showHeader?: boolean;
@@ -20,22 +21,26 @@ const StudentPosts: React.FC<StudentPostsProps> = ({
   maxPosts = 5,
 }) => {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const [activeTab, setActiveTab] = React.useState<string>("all");
+  const [activeTab, setActiveTab] = React.useState<
+    "all" | "announcement" | "instructional" | "public"
+  >("all");
 
   // Options for fetching posts
-  const options = {
-    initialLimit: maxPosts,
-    initialFilters: {} as Record<string, any>,
-  };
+  // const options = {
+  //   limit: maxPosts,
+  //   type: activeTab,
+  // };
 
   // Set type filter if not 'all'
-  if (activeTab !== "all") {
-    options.initialFilters.type = activeTab;
-  }
+  // if (activeTab !== "all") {
+  //   options.type = activeTab === "all" ? "" : activeTab;
+  // }
 
   // Fetch posts
-  const { posts, isLoading, error } = usePosts(options);
+  const { posts, isLoading, error } = usePosts({
+    limit: maxPosts,
+    type: activeTab === "all" ? undefined : activeTab,
+  });
 
   return (
     <Card className="shadow-sm">
@@ -62,7 +67,7 @@ const StudentPosts: React.FC<StudentPostsProps> = ({
           <TabsList className="grid grid-cols-3 mb-4">
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="announcement">Announcements</TabsTrigger>
-            <TabsTrigger value="instructional">Learning</TabsTrigger>
+            <TabsTrigger value="instructional">Instractional</TabsTrigger>
           </TabsList>
 
           <TabsContent value={activeTab} className="mt-0 space-y-4">

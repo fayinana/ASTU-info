@@ -26,7 +26,7 @@ import {
 import { FilterState, useResourceFilters } from "@/hooks/useResourceFilters";
 import ApiQuerySender from "@/lib/apiQuery";
 
-const AdminResources = () => {
+const TeacherResources = () => {
   const navigate = useNavigate();
   const [selectedResource, setSelectedResource] = useState<Resource | null>(
     null
@@ -160,10 +160,10 @@ const AdminResources = () => {
     <AppLayout
       title="Resources"
       breadcrumbs={[
-        { label: "Dashboard", href: "/admin/dashboard" },
+        { label: "Dashboard", href: "/student/dashboard" },
         { label: "Resources" },
       ]}
-      allowedRoles={["admin"]}
+      allowedRoles={["student"]}
     >
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -173,7 +173,7 @@ const AdminResources = () => {
               Manage and share resources with students and staff
             </p>
           </div>
-          <Link to="/admin/upload-resource">
+          <Link to="/teacher/upload-resource">
             <Button>
               <Upload className="mr-2 h-4 w-4" /> Upload Resource
             </Button>
@@ -217,10 +217,10 @@ const AdminResources = () => {
                   data={resources}
                   isLoading={isLoading}
                   onRowClick={(resource) =>
-                    navigate(`/admin/resource/${resource._id}`)
+                    navigate(`/teacher/resource/${resource._id}`)
                   }
                   onView={(resource) =>
-                    navigate(`/admin/resource/${resource._id}`)
+                    navigate(`/teacher/resource/${resource._id}`)
                   }
                   onDelete={handleDelete}
                   searchable
@@ -275,4 +275,4 @@ const AdminResources = () => {
   );
 };
 
-export default AdminResources;
+export default TeacherResources;

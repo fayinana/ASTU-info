@@ -93,7 +93,7 @@ const TeacherPosts = () => {
         { label: "Dashboard", href: "/teacher/dashboard" },
         { label: "All Posts" },
       ]}
-      allowedRoles={["teacher"]}
+      allowedRoles={["student"]}
     >
       <div className="space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

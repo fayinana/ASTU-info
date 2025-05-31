@@ -25,6 +25,8 @@ interface Resource {
   updatedAt: string;
 }
 
+export type ResourceType = "resource" | "exitExam";
+
 interface ResourceCreationResponse {
   message: string;
   resource: Resource;
@@ -62,7 +64,7 @@ interface ResourceCreationRequest {
   school: string;
   department: string;
   course?: string;
-  year?: number;
+  year?: number | string;
   files: File[];
 }
 
