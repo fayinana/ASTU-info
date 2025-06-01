@@ -1,4 +1,3 @@
-
 import { AppLayout } from "@/components/layout/AppLayout";
 import { DataTable } from "@/components/tables/DataTable";
 import StatusBadge from "@/components/tables/StatusBadge";
@@ -27,7 +26,7 @@ import {
   Users as UsersIcon,
 } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const postTypeLabels: Record<string, string> = {
   announcement: "Announcement",
@@ -48,7 +47,7 @@ const AdminPosts = () => {
     isLoading: isLoadingAnnouncements,
     error: announcementsError,
   } = usePosts({
-    initialFilters: { type: "announcement" }
+    initialFilters: { type: "announcement" },
   });
 
   const {
@@ -56,16 +55,10 @@ const AdminPosts = () => {
     isLoading: isLoadingInstructional,
     posts: instructionalPosts,
   } = usePosts({
-    initialFilters: { type: "instructional" }
+    initialFilters: { type: "instructional" },
   });
 
-  const {
-    posts,
-    isLoading: isLoadingPosts,
-    error: postsError,
-  } = usePosts({
-    
-  });
+  const { posts, isLoading: isLoadingPosts, error: postsError } = usePosts({});
 
   // Get all post authors for filter
   const postAuthors = [...new Set(posts.map((post) => post.author._id))];
@@ -75,7 +68,7 @@ const AdminPosts = () => {
   const announcementCount = announcements?.length || 0;
   const instructionalCount = instructionalPosts?.length || 0;
   const publicCount = posts?.length || 0;
-  
+
   const {
     error,
     posts: allPosts,
@@ -113,7 +106,6 @@ const AdminPosts = () => {
           <Avatar user={row.author} size="sm" />
           <div>
             <div className="font-medium">{row.author.name}</div>
-         
           </div>
         </div>
       ),
@@ -173,9 +165,11 @@ const AdminPosts = () => {
               Manage all content across the platform
             </p>
           </div>
-          <Button className="sm:w-auto w-full">
-            <Plus className="mr-2 h-4 w-4" /> New Post
-          </Button>
+          <Link to="/admin/posts/new?type=public">
+            <Button className="sm:w-auto w-full">
+              <Plus className="mr-2 h-4 w-4" /> New Post
+            </Button>
+          </Link>
         </div>
 
         {/* Stats Cards */}
@@ -295,7 +289,7 @@ const AdminPosts = () => {
               pagination={{
                 currentPage: pagination.page,
                 totalPages: pagination.totalPages,
-                onPageChange: (newPage) => (newPage)
+                onPageChange: (newPage) => newPage,
               }}
               querySender={() => {}} // Provide a no-op or actual function as needed
             />
