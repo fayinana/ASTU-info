@@ -93,7 +93,7 @@ const UserDetail = () => {
   }
 
   const handleEditUser = () => {
-    navigate(`/admin/users/${user._id}/edit`);
+    navigate(`/admin/users/students/${user._id}/edit`);
   };
 
   const handleApproveUser = () => {
