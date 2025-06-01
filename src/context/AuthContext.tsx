@@ -1,3 +1,4 @@
+import { useLogout } from "../hooks/useAuth"; // ✅ adjust the path if different
 import {
   useState,
   createContext,
@@ -15,13 +16,15 @@ interface AuthContextType {
   isAuthenticated: boolean;
   setUser: (user: User | null) => void;
   checkRole: (role: string | string[]) => boolean;
+  logout: () => void; // ✅ add this
+
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // Start with loading true
+  const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -40,16 +43,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     fetchUser();
-  }, []); // Empty dependency array to run only on mount
+  }, []);
 
   const checkRole = (role: string | string[]) => {
     if (!user) return false;
+    return Array.isArray(role) ? role.includes(user.role) : user.role === role;
+  };
 
-    if (Array.isArray(role)) {
-      return role.includes(user.role);
-    }
-
-    return user.role === role;
+  const logout = () => {
+    setUser(null);
+    setIsAuthenticated(false);
+    // Optional: logoutApi().catch()...
   };
 
   return (
@@ -60,12 +64,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isAuthenticated,
         setUser,
         checkRole,
+        logout,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
