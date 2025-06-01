@@ -75,6 +75,7 @@ import TeacherCreatePost from "./pages/teacher/public-posts/Create";
 import StudentDashboard from "./pages/student/Dashboard";
 import AdminProfile from "./pages/admin/profile/Profile";
 import TeacherProfile from "./pages/teacher/Profile";
+import UserDetail from "./pages/admin/users/[id]";
 // import StudentResources from "./components/student/StudentResources";
 // import StudentPosts from "./components/student/StudentPosts";
 // import { AuthProvider } from "./context/useAuth";
@@ -175,6 +176,26 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
+    <Route
+      path="/admin/users/students/:id"
+      element={
+        <ProtectedRoute>
+          <RoleGuard allowedRoles={["admin"]}>
+            <UserDetail />
+          </RoleGuard>
+        </ProtectedRoute>
+      }
+    />
+    {/* <Route
+      path="/admin/users/students/:id/edit"
+      element={
+        <ProtectedRoute>
+          <RoleGuard allowedRoles={["admin"]}>
+            <UserDetail />
+          </RoleGuard>
+        </ProtectedRoute>
+      }
+    /> */}
     <Route
       path="/admin/users/teachers"
       element={
