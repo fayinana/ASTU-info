@@ -158,7 +158,7 @@ const AppRoutes = memo(() => (
       }
     />
 
-    <Route
+    {/* <Route
       path="/admin/announcements/new"
       element={
         <ProtectedRoute>
@@ -167,7 +167,7 @@ const AppRoutes = memo(() => (
           </RoleGuard>
         </ProtectedRoute>
       }
-    />
+    /> */}
     <Route
       path="/admin/users/students"
       element={

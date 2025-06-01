@@ -500,7 +500,7 @@ const TeacherPosts = () => {
                   data={posts}
                   isLoading={isLoading}
                   searchable={false} // We're handling search manually
-                  onView={(row) => navigate(`/teacher/posts/${row._id}`)}
+                  onView={(row) => navigate(`/admin/posts/${row._id}`)}
                   pagination={{
                     currentPage: pagination.page,
                     totalPages: pagination.totalPages,

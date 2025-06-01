@@ -22,7 +22,7 @@ import {
 import { Avatar } from "@/components/user/Avatar";
 import { useDeleteAnnouncement } from "@/hooks/useAnnouncements";
 import useAppToast from "@/hooks/useAppToast";
-import { usePosts } from "@/hooks/usePosts";
+import { usePost, usePosts } from "@/hooks/usePosts";
 import { ArrowLeft, Calendar, Share2, Trash } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -30,15 +30,16 @@ const AnnouncementDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { success, error } = useAppToast();
-  const { posts: announcements, isLoading } = usePosts({
-    type: "announcement",
-  });
+  const { post: announcement, isLoading } = usePost(id);
   const { isDeleteing, deleteAnnouncment } = useDeleteAnnouncement();
   if (isLoading)
     return <LoadingOverlay message="Loading..." isLoading={isLoading} />;
-  const announcement = announcements.find(
-    (announcement) => announcement._id === id
-  );
+  // const announcement = announcements.find(
+  //   (announcement) => announcement._id === id
+  // );
+  console.log("Announcement Detail:", announcement);
+  // console.log("Announcements:", announcements);
+  console.log("Announcement id:", id);
   const handleDelete = () => {
     deleteAnnouncment(id);
   };
@@ -76,7 +77,7 @@ const AnnouncementDetailPage = () => {
             <CardHeader className="flex flex-row justify-between items-start">
               <div>
                 <StatusBadge status="active" />
-                <h2 className="text-2xl font-bold">{announcement.title}</h2>
+                {/* <h2 className="text-2xl font-bold">{announcement.title}</h2> */}
 
                 <div className="flex flex-wrap gap-2 mt-2 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
