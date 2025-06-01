@@ -21,13 +21,14 @@ import { useUsers } from "@/hooks/useUsers";
 import { User } from "@/types/user";
 import { Book, Filter, Sparkles } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AdminStudents = () => {
   const { success } = useAppToast();
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [departmentFilter, setDepartmentFilter] = useState<string>("all");
   const [schoolFilter, setSchoolFilter] = useState<string>("all");
-
+  const navigate = useNavigate();
   // Get students from mock data
   const {
     users: students,
@@ -75,7 +76,13 @@ const AdminStudents = () => {
       description: `${user.name} has been removed successfully.`,
     });
   };
+  const handleView = (user: User) => {
+    navigate(`/admin/users/students/${user._id}`);
+  };
 
+  const handleEdit = (user: User) => {
+    navigate(`/admin/users/students/${user._id}/edit`);
+  };
   const columns = [
     {
       header: "Student",
@@ -253,33 +260,12 @@ const AdminStudents = () => {
             </div>
           </div>
         </div>
+{/* student table */}
         <DataTable
           columns={columns}
-          data={filteredStudents} // Use transformed data
-          value={""} // Provide an empty string or the appropriate value as required by your DataTable
-          querySender={(query) => Promise.resolve({ data: [], total: 0 })} // Provide a mock implementation of ApiQuerySender
-          onView={(row: User) => console.log("View teacher:", row._id)}
-          onEdit={(row: User) => console.log("Edit teacher:", row._id)}
-          onDelete={(row: User) => handleDelete(row)}
-          additionalActions={additionalActions}
-          searchable
-          searchPlaceholder="Search teachers..."
-          isLoading={isLoading}
-          pagination={{
-            currentPage: pagination.page,
-            totalPages: pagination.totalPages,
-            onPageChange: (page: number) => {
-              // You may want to refetch or update pagination here
-              // For now, just log or implement your own logic
-              console.log("Change to page:", page);
-            },
-          }}
-        />
-        {/* <DataTable
-          columns={columns}
           data={filteredStudents}
-          onView={(row) => console.log("View student:", row._id)}
-          onEdit={(row) => console.log("Edit student:", row._id)}
+          onView={(row: User) => handleView(row)}
+          onEdit={(row: User) => handleEdit(row)}
           onDelete={(row) => handleDelete(row)}
           additionalActions={
             !statusFilter || statusFilter === "pending"
@@ -292,7 +278,7 @@ const AdminStudents = () => {
           searchPlaceholder="Search students..."
           value={""}
           querySender={() => {}}
-        /> */}
+        />
       </div>
     </AppLayout>
   );

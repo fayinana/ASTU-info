@@ -13,7 +13,6 @@ import {
 } from "./../types/auth";
 import apiClient from "./../lib/apiClient";
 import { handleApiError } from "../lib/apiClient";
-
 // Register a user
 export const register = async (data: RegisterRequest) => {
   try {
@@ -34,7 +33,7 @@ export const register = async (data: RegisterRequest) => {
 export const adminRegister = async (data: AdminRegisterRequest) => {
   try {
     const response = await apiClient.post<AdminRegisterResponse>(
-      "/admin/register",
+      "/auth/adminRegister",
       data
     );
     return response.data;
