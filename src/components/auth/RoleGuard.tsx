@@ -9,7 +9,6 @@ interface RoleGuardProps {
 export const RoleGuard = ({ children, allowedRoles }: RoleGuardProps) => {
   const { user, isAuthenticated, isLoading, checkRole } = useAuth();
   const location = useLocation();
-
   if (isLoading) {
     // Show loading state while checking authentication
     return (
