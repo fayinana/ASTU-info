@@ -114,7 +114,7 @@ const AdminAnnouncementsPage = () => {
               </p>
             </div>
             <Button
-              onClick={() => navigate("/admin/announcements/new")}
+              onClick={() => navigate("/admin/posts/new?type=announcement")}
               className="sm:w-auto w-full"
             >
               <Plus className="mr-2 h-4 w-4" /> New Announcement

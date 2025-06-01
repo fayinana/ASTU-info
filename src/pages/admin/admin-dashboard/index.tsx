@@ -53,9 +53,9 @@ const AdminDashboard = () => {
               manage users, posts, and settings.
             </p>
           </div>
-          <Button onClick={() => navigate("/admin/announcements/new")}>
-            Create Announcement
-          </Button>
+          {/* <Button onClick={() => navigate("/admin/announcements/new")}>
+            Create Announcement2
+          </Button> */}
         </div>
 
         {/* Stats Cards */}

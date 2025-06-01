@@ -29,14 +29,20 @@ const AdminStudents = () => {
   const [schoolFilter, setSchoolFilter] = useState<string>("all");
 
   // Get students from mock data
-         const { users: students, pagination, isLoading } = useUsers({
-      role: "student" as const,
-    });
+  const {
+    users: students,
+    pagination,
+    isLoading,
+  } = useUsers({
+    role: "student" as const,
+  });
   // Apply filters
   const filteredStudents = students.filter((student) => {
     if (statusFilter !== "all") {
-      if (statusFilter === "approved" && student.status !== "approved") return false;
-      if (statusFilter === "pending" && student.status === "approved") return false;
+      if (statusFilter === "approved" && student.status !== "approved")
+        return false;
+      if (statusFilter === "pending" && student.status === "approved")
+        return false;
     }
     if (departmentFilter !== "all" && student.department !== departmentFilter)
       return false;
@@ -106,15 +112,12 @@ const AdminStudents = () => {
     {
       header: "Status",
       accessorKey: "isApproved",
-      cell: (row: User) => (
-        <StatusBadge status={row.status} />
-      ),
+      cell: (row: User) => <StatusBadge status={row.status} />,
     },
     {
       header: "Joined",
       accessorKey: "createdAt",
-      cell: (row: User) =>
-        new Date(row.createdAt).toLocaleDateString(),
+      cell: (row: User) => new Date(row.createdAt).toLocaleDateString(),
     },
   ];
 
@@ -250,8 +253,29 @@ const AdminStudents = () => {
             </div>
           </div>
         </div>
-
         <DataTable
+          columns={columns}
+          data={filteredStudents} // Use transformed data
+          value={""} // Provide an empty string or the appropriate value as required by your DataTable
+          querySender={(query) => Promise.resolve({ data: [], total: 0 })} // Provide a mock implementation of ApiQuerySender
+          onView={(row: User) => console.log("View teacher:", row._id)}
+          onEdit={(row: User) => console.log("Edit teacher:", row._id)}
+          onDelete={(row: User) => handleDelete(row)}
+          additionalActions={additionalActions}
+          searchable
+          searchPlaceholder="Search teachers..."
+          isLoading={isLoading}
+          pagination={{
+            currentPage: pagination.page,
+            totalPages: pagination.totalPages,
+            onPageChange: (page: number) => {
+              // You may want to refetch or update pagination here
+              // For now, just log or implement your own logic
+              console.log("Change to page:", page);
+            },
+          }}
+        />
+        {/* <DataTable
           columns={columns}
           data={filteredStudents}
           onView={(row) => console.log("View student:", row._id)}
@@ -268,7 +292,7 @@ const AdminStudents = () => {
           searchPlaceholder="Search students..."
           value={""}
           querySender={() => {}}
-        />
+        /> */}
       </div>
     </AppLayout>
   );
