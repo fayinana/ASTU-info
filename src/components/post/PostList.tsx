@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { usePosts } from "@/hooks/usePosts";
 import { PostListSkeleton } from "@/components/skeletons/PostListSkeleton";
 import { Post } from "@/types/post";
+import { useLikeDisLike } from "@/hooks/useEngagement";
 
 interface PostListProps {
   defaultType?: "my-posts" | "instructional" | "public" | "all";
@@ -46,6 +47,7 @@ export const PostList = ({
     }
     return filters;
   }, [activeTab, authorOnly, user?._id]);
+  const { isLoading: isLiking, likeDislike } = useLikeDisLike();
 
   console.log("PostList filters:", initialFilters);
   // Fetch posts based on filters

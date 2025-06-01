@@ -169,15 +169,8 @@ const TeacherResources = () => {
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>
             <h1 className="text-2xl font-semibold">Resources</h1>
-            <p className="text-muted-foreground">
-              Manage and share resources with students and staff
-            </p>
+            <p className="text-muted-foreground">View and use resources</p>
           </div>
-          <Link to="/teacher/upload-resource">
-            <Button>
-              <Upload className="mr-2 h-4 w-4" /> Upload Resource
-            </Button>
-          </Link>
         </div>
 
         {error && (

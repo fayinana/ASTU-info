@@ -1,4 +1,4 @@
-import { apiClient , handleApiError} from "./../lib/apiClient"; 
+import { apiClient, handleApiError } from "./../lib/apiClient";
 
 interface ApiResponse {
   message: string;
@@ -14,29 +14,46 @@ export interface GetPostsQuery {
   type?: string;
 }
 
-
-
 export const likeDislikePost = async (postId: string) => {
   try {
-    const response = await apiClient.post<ApiResponse>(`/likeDislike/${postId}`);
+    const response = await apiClient.post<ApiResponse>(
+      `/engagement/likeDislike/${postId}`
+    );
     return response.data;
   } catch (error) {
     throw handleApiError(error);
   }
 };
 
-export const replyToPost = async ({postId, data}:{postId: string, data: ReplyRequest}) => {
+export const replyToPost = async ({
+  postId,
+  data,
+}: {
+  postId: string;
+  data: ReplyRequest;
+}) => {
   try {
-    const response = await apiClient.post<ApiResponse>(`/reply/${postId}`, data);
+    const response = await apiClient.post<ApiResponse>(
+      `/reply/${postId}`,
+      data
+    );
     return response.data;
   } catch (error) {
     throw handleApiError(error);
   }
 };
 
-export const deleteComment = async ({postId, commentId} : {postId: string, commentId: string}) => {
+export const deleteComment = async ({
+  postId,
+  commentId,
+}: {
+  postId: string;
+  commentId: string;
+}) => {
   try {
-    const response = await apiClient.delete<ApiResponse>(`/deleteComment/${postId}/${commentId}`);
+    const response = await apiClient.delete<ApiResponse>(
+      `/deleteComment/${postId}/${commentId}`
+    );
     return response.data;
   } catch (error) {
     throw handleApiError(error);
