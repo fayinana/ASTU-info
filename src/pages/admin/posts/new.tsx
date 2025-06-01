@@ -1,18 +1,32 @@
 import { useState, useRef } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FileUploader } from "@/components/form/FileUploader";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useCreatePost } from "@/hooks/usePosts";
 import { CreatePostRequest } from "@/types/post";
 
 export default function AdminAddPost() {
-  const [postType, setPostType] = useState<"announcement" | "instructional" | "public">("announcement");
+  const [postType, setPostType] = useState<
+    "announcement" | "instructional" | "public"
+  >("announcement");
   const [files, setFiles] = useState<File[]>([]);
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
@@ -71,7 +85,11 @@ export default function AdminAddPost() {
                 <RadioGroup
                   defaultValue="announcement"
                   className="flex flex-wrap gap-4"
-                  onValueChange={(value) => setPostType(value as "announcement" | "instructional" | "public")}
+                  onValueChange={(value) =>
+                    setPostType(
+                      value as "announcement" | "instructional" | "public"
+                    )
+                  }
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="announcement" id="announcement" />
@@ -92,7 +110,11 @@ export default function AdminAddPost() {
               {postType === "announcement" && (
                 <div className="space-y-2">
                   <Label htmlFor="title">Title</Label>
-                  <Input id="title" placeholder="Enter announcement title" ref={titleRef} />
+                  <Input
+                    id="title"
+                    placeholder="Enter announcement title"
+                    ref={titleRef}
+                  />
                 </div>
               )}
 
@@ -118,7 +140,9 @@ export default function AdminAddPost() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="sos">School of Science</SelectItem>
-                        <SelectItem value="soe">School of Engineering</SelectItem>
+                        <SelectItem value="soe">
+                          School of Engineering
+                        </SelectItem>
                         <SelectItem value="soc">School of Computing</SelectItem>
                       </SelectContent>
                     </Select>
@@ -131,7 +155,9 @@ export default function AdminAddPost() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="cs">Computer Science</SelectItem>
-                        <SelectItem value="it">Information Technology</SelectItem>
+                        <SelectItem value="it">
+                          Information Technology
+                        </SelectItem>
                         <SelectItem value="se">Software Engineering</SelectItem>
                       </SelectContent>
                     </Select>
@@ -169,18 +195,19 @@ export default function AdminAddPost() {
               {/* File upload */}
               <div className="space-y-2">
                 <Label>Attachments (Optional)</Label>
-           <FileUploader
-  onChange={(selectedFiles) => setFiles(selectedFiles)}
-  maxFiles={5}
-  maxSize={10 * 1024 * 1024} // 10MB
-  acceptedFileTypes={[
-    "application/pdf",
-    "image/jpeg",
-    "image/png",
-    "application/msword",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-  ]}
-/>     {files.length > 0 && (
+                <FileUploader
+                  onChange={(selectedFiles) => setFiles(selectedFiles)}
+                  maxFiles={5}
+                  maxSize={10 * 1024 * 1024} // 10MB
+                  acceptedFileTypes={[
+                    "application/pdf",
+                    "image/jpeg",
+                    "image/png",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                  ]}
+                />{" "}
+                {files.length > 0 && (
                   <div className="text-sm text-muted-foreground mt-1">
                     {files.length} file(s) selected
                   </div>

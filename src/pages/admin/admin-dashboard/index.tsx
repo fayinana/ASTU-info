@@ -15,10 +15,12 @@ const AdminDashboard = () => {
   const { users, isLoading: isLoadingUser } = useUsers({
     limit: 100,
   });
-    const { filters, pagination, updateFilters, updatePagination, getQuery } =
-      useAnnouncementFilters();
-  
-  const { posts: announcements, isLoading: isLoadingAnnouncements } = usePosts(getQuery());
+  const { filters, pagination, updateFilters, updatePagination, getQuery } =
+    useAnnouncementFilters();
+
+  const { posts: announcements, isLoading: isLoadingAnnouncements } = usePosts(
+    getQuery()
+  );
 
   const { posts, isLoading: isLoadingPosts } = usePosts({
     limit: 100,

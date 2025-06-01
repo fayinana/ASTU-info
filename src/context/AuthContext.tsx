@@ -1,4 +1,10 @@
-import { useState, createContext, useContext, type ReactNode, useEffect } from "react";
+import {
+  useState,
+  createContext,
+  useContext,
+  type ReactNode,
+  useEffect,
+} from "react";
 import type { LoginResponse } from "../types/auth";
 import { User } from "@/types/user";
 import { getProfile } from "@/api/auth";
@@ -16,14 +22,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true); // Start with loading true
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         setIsLoading(true);
         const userData = await getProfile();
-console.log(userData);
-
+        setIsAuthenticated(!!userData);
         setUser(userData);
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
@@ -51,7 +57,7 @@ console.log(userData);
       value={{
         user,
         isLoading,
-        isAuthenticated: !!user,
+        isAuthenticated,
         setUser,
         checkRole,
       }}

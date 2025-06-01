@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
-    adminRegister,
+  adminRegister,
   approveUser,
   logout as logoutApi,
   login as loginApi,
@@ -21,9 +21,9 @@ export const useLogin = () => {
   } = useMutation({
     mutationFn: loginApi,
     onSuccess: (data: LoginResponse) => {
+      toast.success(`Welcome back, ${data?.name}!`);
       const redirectPath = `/${data?.role}/dashboard`;
       navigate(redirectPath);
-      toast.success(`Welcome back, ${data?.name}!`);
     },
     onError: (error: Error) => {
       toast.error(`Login failed: ${error.message}`);
@@ -103,9 +103,7 @@ export const useApproveUser = () => {
     mutationFn: approveUser,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success(
-        `User ${variables} successfully`
-      );
+      toast.success(`User ${variables} successfully`);
     },
     onError: (error: Error) => {
       toast.error(`Operation failed: ${error.message}`);
