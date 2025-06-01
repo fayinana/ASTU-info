@@ -24,9 +24,7 @@ import { useCreatePost } from "@/hooks/usePosts";
 import { CreatePostRequest } from "@/types/post";
 
 export default function AdminAddPost() {
-  const [postType, setPostType] = useState<
-    "announcement" | "instructional" | "public"
-  >("announcement");
+  const [postType, setPostType] = useState<"public">("public");
   const [files, setFiles] = useState<File[]>([]);
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
@@ -42,24 +40,12 @@ export default function AdminAddPost() {
 
     const data: CreatePostRequest = {
       content: contentRef.current?.value || "",
-      title: postType === "public" ? titleRef.current?.value || "" : "",
+      title: titleRef.current?.value,
       files: files[0], // Assuming only one file for simplicity; adjust if multiple files are needed
       type: postType,
     };
 
-    // For instructional posts, append additional fields if needed
-    if (postType === "instructional") {
-      const instructionalData = {
-        ...data,
-        school,
-        department,
-        batch,
-        section,
-      };
-      createPost(instructionalData);
-    } else {
-      createPost(data);
-    }
+    createPost(data);
   }
 
   return (
@@ -93,8 +79,17 @@ export default function AdminAddPost() {
                   </div>
                 </RadioGroup>
               </div>
-
+              {/* input  */}
+              <div className="space-y-2">
+                <Label htmlFor="title">Title</Label>
+                <Input
+                  id="title"
+                  placeholder="Enter announcement title"
+                  ref={titleRef}
+                />
+              </div>
               {/* Content */}
+
               <div className="space-y-2">
                 <Label htmlFor="content">Content</Label>
                 <Textarea
@@ -106,7 +101,7 @@ export default function AdminAddPost() {
               </div>
 
               {/* Target audience (for instructional posts) */}
-              {postType === "instructional" && (
+              {postType === "public" && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="school">School</Label>

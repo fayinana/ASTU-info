@@ -11,7 +11,6 @@ const StudentDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Quick links for students
   const quickLinks = [
     {
       title: "Posts",
@@ -43,7 +42,6 @@ const StudentDashboard = () => {
       allowedRoles={["student"]}
     >
       <div className="space-y-6">
-        {/* Welcome Section */}
         <div className="space-y-2">
           <h1 className="text-3xl font-bold">Welcome back, {user?.name}</h1>
           <p className="text-muted-foreground">
@@ -53,7 +51,6 @@ const StudentDashboard = () => {
           </p>
         </div>
 
-        {/* Quick Links */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-4">
           {quickLinks.map((link) => (
             <Card
@@ -79,30 +76,12 @@ const StudentDashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Announcements & Posts Column */}
           <div className="space-y-6">
             <StudentPosts maxPosts={3} />
           </div>
 
-          {/* Resources Column */}
-          <div className="space-y-6">
+          <div className="space-y-6 md:sticky top-6 self-start h-fit">
             <StudentResources maxResources={6} />
-
-            {/* Upcoming Events Card */}
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Upcoming Events</CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="text-center py-8">
-                  <Calendar className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
-                  <p className="text-muted-foreground">No upcoming events</p>
-                  <Button variant="ghost" size="sm" className="mt-2">
-                    View calendar
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>

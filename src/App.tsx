@@ -40,7 +40,7 @@ import UploadReacourse from "@/pages/admin/resource/UploadReacourse";
 // import TeacherInstructionalPosts from "@/pages/teacher/InstructionalPosts";
 // import TeacherPosts from "@/pages/teacher/Posts";
 // import TeacherProfile from "@/pages/teacher/Profile";
-// import TeacherCreatePublic from "@/pages/teacher/public-posts/Create";
+// import TeacherCreatePublic from "@/pages/teacher/public-posts/create";
 // import TeacherPublicPosts from "@/pages/teacher/PublicPosts";
 // import TeacherResources from "@/pages/teacher/Resources";
 // import TeacherStudents from "@/pages/teacher/Students";
@@ -71,11 +71,12 @@ import TeacherPublicPosts from "./pages/teacher/PublicPosts";
 import TeacherResources from "./pages/teacher/Resources";
 import UploadResource from "./pages/teacher/UploadReacourse";
 import TeacherStudents from "./pages/teacher/Students";
-import TeacherCreatePost from "./pages/teacher/public-posts/Create";
+import TeacherCreatePost from "./pages/teacher/public-posts/create";
 import StudentDashboard from "./pages/student/Dashboard";
 import AdminProfile from "./pages/admin/profile/Profile";
 import TeacherProfile from "./pages/teacher/Profile";
-import Chat from "./pages/Chat";
+import UserDetail from "./pages/admin/users/[id]";
+import UserEdit from "./pages/admin/users/UserEdit";
 // import StudentResources from "./components/student/StudentResources";
 // import StudentPosts from "./components/student/StudentPosts";
 // import { AuthProvider } from "./context/useAuth";
@@ -172,6 +173,26 @@ const AppRoutes = memo(() => (
         <ProtectedRoute>
           <RoleGuard allowedRoles={["admin"]}>
             <AdminStudents />
+          </RoleGuard>
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/admin/users/students/:id"
+      element={
+        <ProtectedRoute>
+          <RoleGuard allowedRoles={["admin"]}>
+            <UserDetail />
+          </RoleGuard>
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/admin/users/students/:id/edit"
+      element={
+        <ProtectedRoute>
+          <RoleGuard allowedRoles={["admin"]}>
+            <UserEdit />
           </RoleGuard>
         </ProtectedRoute>
       }
