@@ -75,6 +75,7 @@ import TeacherCreatePost from "./pages/teacher/public-posts/Create";
 import StudentDashboard from "./pages/student/Dashboard";
 import AdminProfile from "./pages/admin/profile/Profile";
 import TeacherProfile from "./pages/teacher/Profile";
+import Chat from "./pages/Chat";
 // import StudentResources from "./components/student/StudentResources";
 // import StudentPosts from "./components/student/StudentPosts";
 // import { AuthProvider } from "./context/useAuth";
@@ -414,14 +415,14 @@ const AppRoutes = memo(() => (
     />
 
     {/* Chat Route */}
-    {/* <Route
+    <Route
       path="/chat"
       element={
         <ProtectedRoute>
           <Chat />
         </ProtectedRoute>
       }
-    /> */}
+    />
 
     <Route path="*" element={<NotFound />} />
   </Routes>
