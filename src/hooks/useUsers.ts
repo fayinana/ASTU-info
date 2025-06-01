@@ -1,4 +1,6 @@
 // import { assignTeacherResponsibilities as assignTeacherResponsibilitiesApi } from "@/api/auth";
+import { approveUser as approveUserApi, rejectUser as rejectUserApi } from "@/api/user";
+
 import { fetchUsers, updateProfile as updateUserProfileApi } from "@/api/user";
 import { GetUsersQuery } from "@/types/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -105,3 +107,4 @@ export const useAssignTeacherResponsibilities = () => {
     reset,
   };
 };
+

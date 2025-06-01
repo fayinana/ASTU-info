@@ -76,6 +76,8 @@ export const useAdminRegister = () => {
 };
 
 export const useLogout = () => {
+  const { setUser } = useAuth(); // ✅ must have this
+
   const {
     mutate: logout,
     isPending: isLoading,
@@ -84,6 +86,8 @@ export const useLogout = () => {
   } = useMutation({
     mutationFn: logoutApi,
     onSuccess: () => {
+      setUser(null); // ✅ this clears the user in context
+
       toast.success("Logged out successfully");
     },
     onError: (error: Error) => {
