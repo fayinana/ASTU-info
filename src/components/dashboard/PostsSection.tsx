@@ -86,7 +86,7 @@ const PostsSection: React.FC<PostsSectionProps> = ({ posts, isLoading }) => {
 
   return (
     <Card>
-      <CardHeader className="border-b pb-3">
+      <CardHeader className="border-b pb-3 ">
         <h3 className="text-lg font-medium">Recent Posts</h3>
       </CardHeader>
       <CardContent className="p-0">
