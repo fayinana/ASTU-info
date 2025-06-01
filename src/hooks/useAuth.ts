@@ -86,8 +86,7 @@ export const useLogout = () => {
   } = useMutation({
     mutationFn: logoutApi,
     onSuccess: () => {
-      setUser(null); // ✅ this clears the user in context
-
+      setUser(null);
       toast.success("Logged out successfully");
     },
     onError: (error: Error) => {

@@ -34,9 +34,6 @@ export const LoginForm = () => {
 
   const handleSubmit = (data: LoginRequest) => {
     login(data);
-    console.log("====================================");
-    console.log(error);
-    console.log("====================================");
   };
 
   return (

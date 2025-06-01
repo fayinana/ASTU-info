@@ -18,24 +18,13 @@ import { useUsers } from "@/hooks/useUsers";
 import { useAuth } from "@/context/AuthContext";
 import { Link } from "react-router-dom";
 
-// Define User type based on API data
 import type { User } from "@/types/user";
-
-interface SectionAssignment {
-  section: string;
-  subject: string;
-  department?: string;
-  school?: string;
-  _id: string;
-}
-
 const AdminTeachers = () => {
   const { success } = useAppToast();
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [departmentFilter, setDepartmentFilter] = useState<string>("all");
   const { user } = useAuth();
 
-  // Initial filters based on logged-in user's department
   const initialFilters = useMemo(
     () => ({
       department: user?.department || undefined,
@@ -62,7 +51,6 @@ const AdminTeachers = () => {
     return Array.from(deptSet).sort();
   }, [teachers]);
 
-  // Filter teachers and ensure valid data
   const filteredTeachers = useMemo(() => {
     return teachers
       .filter((teacher): teacher is User => {
@@ -100,7 +88,9 @@ const AdminTeachers = () => {
   const handleApprove = (teacher: User) => {
     success({
       title: "Teacher Approved",
-      description: `${teacher?.name || "Unknown"} has been approved successfully.`,
+      description: `${
+        teacher?.name || "Unknown"
+      } has been approved successfully.`,
     });
     // TODO: Call API to update teacher status
   };
@@ -108,7 +98,9 @@ const AdminTeachers = () => {
   const handleDelete = (teacher: User) => {
     success({
       title: "Teacher Removed",
-      description: `${teacher?.name || "Unknown"} has been removed successfully.`,
+      description: `${
+        teacher?.name || "Unknown"
+      } has been removed successfully.`,
     });
     // TODO: Call API to delete teacher
   };
@@ -126,7 +118,9 @@ const AdminTeachers = () => {
             <Avatar user={row.row} size="sm" />
             <div>
               <div className="font-medium">{row.row.name}</div>
-              <div className="text-sm text-muted-foreground">{row.row.email}</div>
+              <div className="text-sm text-muted-foreground">
+                {row.row.email}
+              </div>
             </div>
           </div>
         );
@@ -168,7 +162,8 @@ const AdminTeachers = () => {
       header: "Status",
       accessorKey: "status",
       cell: ({ row }: { row: { row: User } | undefined }) => {
-        if (!row || !row.row || !row.row.status) return <StatusBadge status="pending" />;
+        if (!row || !row.row || !row.row.status)
+          return <StatusBadge status="pending" />;
         return <StatusBadge status={row.row.status} />;
       },
     },
@@ -188,7 +183,8 @@ const AdminTeachers = () => {
       onClick: ({ row }: { row: { row: User } }) => handleApprove(row.row),
       variant: "default" as const,
       className: "bg-green-600 hover:bg-green-700",
-      condition: ({ row }: { row: { row: User } }) => row.row.status === "pending",
+      condition: ({ row }: { row: { row: User } }) =>
+        row.row.status === "pending",
     },
   ];
 
@@ -259,38 +255,30 @@ const AdminTeachers = () => {
           </div>
         </div>
 
-        {isLoading ? (
-          <div className="text-center py-6 text-muted-foreground">
-            Loading teachers...
-          </div>
-        ) : filteredTeachers.length === 0 ? (
-          <div className="text-center py-6 text-muted-foreground">
-            No teachers found.
-          </div>
-        ) : (
-          <DataTable
-            columns={columns}
-            data={tableData} // Use transformed data
-            value={[]} // Provide an empty array or the appropriate value as required by your DataTable
-            querySender={() => {}} // Provide a no-op function or your actual query sender
-            onView={({ row }: { row: { row: User } }) => console.log("View teacher:", row.row._id)}
-            onEdit={({ row }: { row: { row: User } }) => console.log("Edit teacher:", row.row._id)}
-            onDelete={({ row }: { row: { row: User } }) => handleDelete(row.row)}
-            additionalActions={additionalActions}
-            searchable
-            searchPlaceholder="Search teachers..."
-            isLoading={isLoading}
-            pagination={{
-              currentPage: pagination.page,
-              totalPages: pagination.totalPages,
-              onPageChange: (page: number) => {
-                // You may want to refetch or update pagination here
-                // For now, just log or implement your own logic
-                console.log("Change to page:", page);
-              },
-            }}
-          />
-        )}
+        <DataTable
+          columns={columns}
+          data={tableData} // Use transformed data
+          value={[]}
+          querySender={() => {}} // Provide a no-op function or your actual query sender
+          onView={({ row }: { row: { row: User } }) =>
+            console.log("View teacher:", row.row._id)
+          }
+          onEdit={({ row }: { row: { row: User } }) =>
+            console.log("Edit teacher:", row.row._id)
+          }
+          onDelete={({ row }: { row: { row: User } }) => handleDelete(row.row)}
+          additionalActions={additionalActions}
+          searchable
+          searchPlaceholder="Search teachers..."
+          isLoading={isLoading}
+          pagination={{
+            currentPage: pagination.page,
+            totalPages: pagination.totalPages,
+            onPageChange: (page: number) => {
+              console.log("Change to page:", page);
+            },
+          }}
+        />
       </div>
     </AppLayout>
   );
