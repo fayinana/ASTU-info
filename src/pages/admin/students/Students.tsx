@@ -260,10 +260,11 @@ const AdminStudents = () => {
             </div>
           </div>
         </div>
-{/* student table */}
+        {/* student table */}
         <DataTable
           columns={columns}
           data={filteredStudents}
+          isLoading={isLoading}
           onView={(row: User) => handleView(row)}
           onEdit={(row: User) => handleEdit(row)}
           onDelete={(row) => handleDelete(row)}
