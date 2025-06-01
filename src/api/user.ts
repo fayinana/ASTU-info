@@ -49,3 +49,5 @@ export const updateProfile = async ({id , data}: {id: string, data: ProfileUpdat
     throw handleApiError(error);
   }
 };
+
+

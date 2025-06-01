@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+import { useLogout } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -24,9 +24,11 @@ import {
   Edit,
   Plus,
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 export const Sidebar = () => {
-  const { user, logout } = useAuth();
+  const { logout } = useLogout();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -118,11 +120,6 @@ export const Sidebar = () => {
                 href="/admin/student-search"
                 icon={Search}
                 label="Student Search"
-              />
-              <MenuItem
-                href="/admin/settings"
-                icon={Shield}
-                label="System Settings"
               />
             </div>
           </div>
