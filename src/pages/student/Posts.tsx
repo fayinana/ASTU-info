@@ -126,6 +126,8 @@ const TeacherPosts = () => {
                 <TabsList>
                   <TabsTrigger value="all">All Posts</TabsTrigger>
                   <TabsTrigger value="instructional">Instructional</TabsTrigger>
+
+                  <TabsTrigger value="announcement">Announcement</TabsTrigger>
                   <TabsTrigger value="public">Public</TabsTrigger>
                 </TabsList>
 
