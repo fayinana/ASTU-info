@@ -187,22 +187,32 @@ export function DataTable<T>({
                   ))}
                   {hasActions && (
                     <TableCell className="text-right">
-                      <TableActions
-                        value={value}
-                        onView={onView ? () => onView(row) : undefined}
-                        onEdit={onEdit ? () => onEdit(row) : undefined}
-                        onDelete={onDelete ? () => onDelete(row) : undefined}
-                        hideDelete={hideDelete(row)}
-                        additionalActions={
-                          additionalActions
-                            ? additionalActions.map((action) => ({
-                                ...action,
-                                onClick: () => action.onClick(row),
-                              }))
-                            : undefined
-                        }
-                      />
-                    </TableCell>
+                    <TableActions
+                      value={value}
+                      onView={onView ? () => onView(row) : undefined}
+                      onEdit={onEdit ? () => onEdit(row) : undefined}
+                      onDelete={onDelete ? () => onDelete(row) : undefined}
+                      hideDelete={hideDelete(row)}
+                      additionalActions={
+                        additionalActions
+                          ? additionalActions.map((action) => ({
+                              ...action,
+                              onClick: () => action.onClick(row),
+                              label:
+  typeof action.label === "function"
+    ? action.label(row)
+    : action.label,
+className:
+  typeof action.className === "function"
+    ? action.className(row)
+    : action.className,
+
+                            }))
+                          : undefined
+                      }
+                    />
+                  </TableCell>
+                  
                   )}
                 </TableRow>
               ))

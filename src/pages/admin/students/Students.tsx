@@ -31,7 +31,7 @@ const AdminStudents = () => {
   const [departmentFilter, setDepartmentFilter] = useState<string>("all");
   const [schoolFilter, setSchoolFilter] = useState<string>("all");
   const navigate = useNavigate();
-  // Get students from mock data
+
   const {
     users: students,
     pagination,
@@ -39,7 +39,7 @@ const AdminStudents = () => {
   } = useUsers({
     role: "student" as const,
   });
-  // Apply filters
+
   const filteredStudents = students.filter((student) => {
     if (statusFilter !== "all") {
       if (statusFilter === "approved" && student.status !== "approved")
@@ -53,7 +53,6 @@ const AdminStudents = () => {
     return true;
   });
 
-  // Get unique departments and schools for filters
   const departments = [
     ...new Set(students.map((student) => student.department)),
   ].filter(Boolean) as string[];
@@ -61,12 +60,21 @@ const AdminStudents = () => {
     ...new Set(students.map((student) => student.school)),
   ].filter(Boolean) as string[];
 
-  // Count approved and pending students
   const approvedCount = students.filter((s) => s.status === "approved").length;
   const pendingCount = students.filter((s) => s.status === "pending").length;
   const { approve, isLoading: isApproving } = useApproveUser();
+
   const handleApprove = (user: User) => {
-    approve({ id: user._id, userStatus: "approve" });
+    let newStatus = "approve";
+    if (user.status === "approved") {
+      newStatus = "suspend";
+    } else if (user.status === "suspended" || user.status === "rejected") {
+      newStatus = "approve";
+    }
+
+    if (newStatus) {
+      approve({ id: user._id, userStatus: newStatus as "approve" });
+    }
   };
 
   const handleDelete = (user: User) => {
@@ -75,6 +83,7 @@ const AdminStudents = () => {
       description: `${user.name} has been removed successfully.`,
     });
   };
+
   const handleView = (user: User) => {
     navigate(`/admin/users/students/${user._id}`);
   };
@@ -82,6 +91,7 @@ const AdminStudents = () => {
   const handleEdit = (user: User) => {
     navigate(`/admin/users/students/${user._id}/edit`);
   };
+
   const columns = [
     {
       header: "Student",
@@ -125,16 +135,23 @@ const AdminStudents = () => {
       accessorKey: "createdAt",
       cell: (row: User) => new Date(row.createdAt).toLocaleDateString(),
     },
+   
   ];
 
   const additionalActions = [
     {
-      label: "Approve",
+      label: (row: User) => row.status === "approved" ? "Suspend" : "Approve",
       onClick: (row: User) => handleApprove(row),
-      variant: "default" as const,
-      className: "bg-green-600 hover:bg-green-700",
+      variant: "default",
+      className: (row: User) => 
+        row.status === "approved"
+          ? "bg-red-600 hover:bg-red-700"
+          : "bg-green-600 hover:bg-green-700",
+      condition: (row: User) => true,
     },
   ];
+  
+
   if (isLoading)
     return (
       <LoadingOverlay isLoading={isApproving} message="approving student..." />
@@ -156,10 +173,8 @@ const AdminStudents = () => {
               Approve, view, and manage student accounts.
             </p>
           </div>
-          <div></div>
         </div>
 
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
             <CardHeader className="pb-2">
@@ -202,7 +217,6 @@ const AdminStudents = () => {
           </Card>
         </div>
 
-        {/* Filters */}
         <div className="bg-muted/40 p-4 rounded-lg border">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="space-y-2 flex-1">
@@ -263,19 +277,18 @@ const AdminStudents = () => {
             </div>
           </div>
         </div>
-        {/* student table */}
+
         <DataTable
           columns={columns}
           data={filteredStudents}
           isLoading={isLoading}
-          onView={(row: User) => handleView(row)}
-          onEdit={(row: User) => handleEdit(row)}
-          onDelete={(row) => handleDelete(row)}
-          additionalActions={additionalActions}
+          onView={handleView}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
           searchable
           searchPlaceholder="Search students..."
-          value={""}
-          querySender={() => {}}
+          value=""           
+          additionalActions={additionalActions}
         />
       </div>
     </AppLayout>
