@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PostList from "@/components/post/PostList";
 import { PlusCircle, BookOpen } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 const TeacherInstructionalPosts = () => {
   const navigate = useNavigate();
@@ -28,7 +29,8 @@ const TeacherInstructionalPosts = () => {
             </p>
           </div>
           <Button
-            onClick={() => navigate("/teacher/instructional-posts/create")}
+            onClick={() => navigate(`/teacher/posts/new?type=instructional`)}
+            className="flex items-center"
           >
             <PlusCircle className="mr-2 h-4 w-4" />
             Create Post

@@ -44,7 +44,7 @@ export default function UploadResource() {
 
   return (
     <AppLayout
-      title="Admin Dashboard"
+      title="Upload Resource"
       breadcrumbs={[
         { label: "Dashboard", href: "/admin/dashboard" },
         { label: "Resources", href: "/admin/resources" },
