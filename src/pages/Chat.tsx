@@ -27,7 +27,7 @@ const Chat: React.FC = () => {
   const currentUser = user;
   // const selectedUserId = searchParams.get("userId");
 
-  const { conversations } = useGetConversations();
+  const { conversations , conversationsLoading } = useGetConversations();
 
   console.log("====================================");
   console.log(conversations);
@@ -55,7 +55,7 @@ const Chat: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              {isLoading ? (
+              {conversationsLoading ? (
                 <div className="p-4 text-center">Loading conversations...</div>
               ) : conversations?.length > 0 ? (
                 <div className="space-y-1">

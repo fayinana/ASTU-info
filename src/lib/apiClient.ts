@@ -6,7 +6,7 @@ import axios, {
 } from "axios";
 
 export const baseURL =
-  import.meta.env.VITE_API_BASE_URL || "https://gibi-ssvh.onrender.com/api";
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
 export const api = axios.create({
   baseURL,

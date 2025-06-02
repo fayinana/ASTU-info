@@ -13,7 +13,7 @@ axios.defaults.withCredentials = true;
 export const getConversations = async () => {
   try {
     const response = await apiClient.get<GetConversationsResponse>(
-      "/messages/conversation"
+      "/messages/conversations"
     );
 
     return response.data;
