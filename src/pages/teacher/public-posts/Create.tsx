@@ -22,11 +22,15 @@ import {
 } from "@/components/ui/select";
 import { useCreatePost } from "@/hooks/usePosts";
 import { CreatePostRequest } from "@/types/post";
+import { useLocation, useParams } from "react-router-dom";
 
 export default function AdminAddPost() {
-  const [postType, setPostType] = useState<
-    "announcement" | "instructional" | "public"
-  >("announcement");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const type = queryParams.get("type");
+  const [postType, setPostType] = useState<"instructional" | "public">(
+    type as "instructional" | "public"
+  );
   const [files, setFiles] = useState<File[]>([]);
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
@@ -34,6 +38,8 @@ export default function AdminAddPost() {
   const [department, setDepartment] = useState<string>("");
   const [batch, setBatch] = useState<string>("");
   const [section, setSection] = useState<string>("");
+  console.log(type);
+  console.log(postType);
 
   const { createPost, error, isLoading } = useCreatePost();
 
@@ -42,7 +48,7 @@ export default function AdminAddPost() {
 
     const data: CreatePostRequest = {
       content: contentRef.current?.value || "",
-      title: postType === "public" ? titleRef.current?.value || "" : "",
+      title: titleRef.current?.value,
       files: files[0], // Assuming only one file for simplicity; adjust if multiple files are needed
       type: postType,
     };
@@ -83,12 +89,16 @@ export default function AdminAddPost() {
               <div className="space-y-2">
                 <Label>Post Type</Label>
                 <RadioGroup
-                  defaultValue="public"
+                  defaultValue={postType}
                   className="flex flex-wrap gap-4"
                   onValueChange={(value) =>
-                    setPostType(value as "announcement" | "public")
+                    setPostType(value as "instructional" | "public")
                   }
                 >
+                  {/* <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="instructional" id="instructional" />
+                    <Label htmlFor="instructional">instructional</Label>
+                  </div> */}
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="instructional" id="instructional" />
                     <Label htmlFor="instructional">Instructional</Label>
@@ -98,6 +108,17 @@ export default function AdminAddPost() {
                     <Label htmlFor="public">Public</Label>
                   </div>
                 </RadioGroup>
+              </div>
+
+              {/* Title (only for announcements) */}
+
+              <div className="space-y-2">
+                <Label htmlFor="title">Title</Label>
+                <Input
+                  id="title"
+                  placeholder="Enter post title"
+                  ref={titleRef}
+                />
               </div>
 
               {/* Content */}

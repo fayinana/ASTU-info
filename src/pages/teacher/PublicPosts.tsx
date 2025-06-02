@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PostList from "@/components/post/PostList";
 import { PlusCircle, MessageSquare } from "lucide-react";
@@ -9,7 +9,9 @@ import { PlusCircle, MessageSquare } from "lucide-react";
 const TeacherPublicPosts = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<string>("browse");
-
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const type = queryParams.get("type");
   return (
     <AppLayout
       title="Public Posts"
@@ -27,7 +29,7 @@ const TeacherPublicPosts = () => {
               Create and manage public discussion posts.
             </p>
           </div>
-          <Button onClick={() => navigate("/teacher/posts/new")}>
+          <Button onClick={() => navigate("/teacher/posts/new?type=public")}>
             <PlusCircle className="mr-2 h-4 w-4" />
             Create Post
           </Button>
