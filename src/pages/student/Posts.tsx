@@ -90,7 +90,7 @@ const TeacherPosts = () => {
     <AppLayout
       title="All Posts"
       breadcrumbs={[
-        { label: "Dashboard", href: "/teacher/dashboard" },
+        { label: "Dashboard", href: "/student/dashboard" },
         { label: "All Posts" },
       ]}
       allowedRoles={["student"]}
@@ -153,7 +153,7 @@ const TeacherPosts = () => {
                   data={posts}
                   isLoading={isLoading}
                   searchable={false} // We're handling search manually
-                  onView={(row) => navigate(`/teacher/posts/${row._id}`)}
+                  onView={(row) => navigate(`/student/posts/${row._id}`)}
                   pagination={{
                     currentPage: pagination.page,
                     totalPages: pagination.totalPages,
