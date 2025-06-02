@@ -95,7 +95,7 @@ const PostsSection: React.FC<PostsSectionProps> = ({ posts, isLoading }) => {
           columns={columns}
           data={posts}
           isLoading={isLoading}
-          onView={(row) => navigate(`/admin/posts/${row._id}`)}
+          onView={(row) => navigate(`/teacher/posts/${row._id}`)}
           onDelete={(row) => {
             if (user._id === row.author._id) {
               return null;

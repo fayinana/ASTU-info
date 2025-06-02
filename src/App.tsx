@@ -298,6 +298,16 @@ const AppRoutes = memo(() => (
       }
     />
     <Route
+      path="/teacher/posts/:id"
+      element={
+        <ProtectedRoute>
+          <RoleGuard allowedRoles={["teacher"]}>
+            <TeacherPostDetail />
+          </RoleGuard>
+        </ProtectedRoute>
+      }
+    />
+    <Route
       path="/teacher/posts"
       element={
         <ProtectedRoute>
