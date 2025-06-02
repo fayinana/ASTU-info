@@ -19,6 +19,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Link } from "react-router-dom";
 
 import type { User } from "@/types/user";
+import { useApproveUser } from "@/hooks/useAuth";
 const AdminTeachers = () => {
   const { success } = useAppToast();
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -84,15 +85,9 @@ const AdminTeachers = () => {
     () => filteredTeachers.map((teacher) => ({ row: { row: teacher } })),
     [filteredTeachers]
   );
-
-  const handleApprove = (teacher: User) => {
-    success({
-      title: "Teacher Approved",
-      description: `${
-        teacher?.name || "Unknown"
-      } has been approved successfully.`,
-    });
-    // TODO: Call API to update teacher status
+  const { approve, isLoading: isApproving } = useApproveUser();
+  const handleApprove = (user: User) => {
+    approve({ id: user._id, userStatus: "approve" });
   };
 
   const handleDelete = (teacher: User) => {

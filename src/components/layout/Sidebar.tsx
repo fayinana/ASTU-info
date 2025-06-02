@@ -40,7 +40,6 @@ export const Sidebar = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/login");
   };
 
   const MenuItem = ({

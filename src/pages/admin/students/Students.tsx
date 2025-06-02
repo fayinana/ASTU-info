@@ -1,4 +1,5 @@
 import { AppLayout } from "@/components/layout/AppLayout";
+import { LoadingOverlay } from "@/components/modals/LoadingOverlay";
 import { DataTable } from "@/components/tables/DataTable";
 import StatusBadge from "@/components/tables/StatusBadge";
 import {
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Avatar } from "@/components/user/Avatar";
 import useAppToast from "@/hooks/useAppToast";
+import { useApproveUser } from "@/hooks/useAuth";
 import { useUsers } from "@/hooks/useUsers";
 import { User } from "@/types/user";
 import { Book, Filter, Sparkles } from "lucide-react";
@@ -62,12 +64,9 @@ const AdminStudents = () => {
   // Count approved and pending students
   const approvedCount = students.filter((s) => s.status === "approved").length;
   const pendingCount = students.filter((s) => s.status === "pending").length;
-
+  const { approve, isLoading: isApproving } = useApproveUser();
   const handleApprove = (user: User) => {
-    success({
-      title: "Student Approved",
-      description: `${user.name} has been approved successfully.`,
-    });
+    approve({ id: user._id, userStatus: "approve" });
   };
 
   const handleDelete = (user: User) => {
@@ -136,6 +135,10 @@ const AdminStudents = () => {
       className: "bg-green-600 hover:bg-green-700",
     },
   ];
+  if (isLoading)
+    return (
+      <LoadingOverlay isLoading={isApproving} message="approving student..." />
+    );
 
   return (
     <AppLayout
@@ -268,13 +271,7 @@ const AdminStudents = () => {
           onView={(row: User) => handleView(row)}
           onEdit={(row: User) => handleEdit(row)}
           onDelete={(row) => handleDelete(row)}
-          additionalActions={
-            !statusFilter || statusFilter === "pending"
-              ? filteredStudents.filter((s) => s.status === "pending").length
-                ? additionalActions
-                : undefined
-              : undefined
-          }
+          additionalActions={additionalActions}
           searchable
           searchPlaceholder="Search students..."
           value={""}

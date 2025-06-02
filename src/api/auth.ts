@@ -71,8 +71,8 @@ export const approveUser = async ({
   userStatus: "approve" | "suspend" | "reject";
 }) => {
   try {
-    const response = await apiClient.put<ApprovalResponse>(
-      `/users/${id}/status/${userStatus}`
+    const response = await apiClient.post<ApprovalResponse>(
+      `/auth/approval/${userStatus}/${id}`
     );
     return response.data;
   } catch (error) {
@@ -81,11 +81,13 @@ export const approveUser = async ({
 };
 
 // Assign teacher responsibilities
-export const assignTeacherResponsibilities = async ({id,
-  data} :{
-  id: string,
-  data: TeacherResponsibilitiesRequest}
-) => {
+export const assignTeacherResponsibilities = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: TeacherResponsibilitiesRequest;
+}) => {
   try {
     const response = await apiClient.put<TeacherResponsibilitiesResponse>(
       `/auth/assignTeacherResponsibilities/${id}`,
@@ -100,7 +102,9 @@ export const assignTeacherResponsibilities = async ({id,
 // Get current user profile
 export const getProfile = async () => {
   try {
-    const response = await apiClient.get<GetProfileResponse>("/auth/getProfileUser");
+    const response = await apiClient.get<GetProfileResponse>(
+      "/auth/getProfileUser"
+    );
     return response.data;
   } catch (error) {
     throw handleApiError(error);

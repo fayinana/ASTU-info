@@ -21,9 +21,9 @@ export const useLogin = () => {
   } = useMutation({
     mutationFn: loginApi,
     onSuccess: (data: LoginResponse) => {
+      setUser(data);
       toast.success(`Welcome back, ${data?.name}!`);
       const redirectPath = `/${data?.role}/dashboard`;
-      setUser(data);
       navigate(redirectPath);
     },
     onError: (error: Error) => {
@@ -77,7 +77,7 @@ export const useAdminRegister = () => {
 
 export const useLogout = () => {
   const { setUser } = useAuth(); // ✅ must have this
-
+  const navigate = useNavigate();
   const {
     mutate: logout,
     isPending: isLoading,
@@ -87,6 +87,8 @@ export const useLogout = () => {
     mutationFn: logoutApi,
     onSuccess: () => {
       setUser(null);
+      navigate("/login");
+
       toast.success("Logged out successfully");
     },
     onError: (error: Error) => {
@@ -107,7 +109,7 @@ export const useApproveUser = () => {
     mutationFn: approveUser,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success(`User ${variables} successfully`);
+      toast.success(`User ${variables.userStatus} successfully`);
     },
     onError: (error: Error) => {
       toast.error(`Operation failed: ${error.message}`);
