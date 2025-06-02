@@ -14,6 +14,7 @@ import { format } from "date-fns";
 
 const TeacherPosts = () => {
   const navigate = useNavigate();
+
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<
     "announcement" | "instructional" | "public" | "all"
@@ -105,7 +106,7 @@ const TeacherPosts = () => {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => navigate("/teacher/posts/new")}>
+            <Button onClick={() => navigate("/teacher/posts/new?type=public")}>
               <PlusCircle className="mr-2 h-4 w-4" />
               Create Public
             </Button>

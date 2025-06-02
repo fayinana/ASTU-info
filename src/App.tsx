@@ -53,6 +53,9 @@ import StudentCreatePublic from "@/pages/student/public-posts/Create";
 import StudentPublicPosts from "@/pages/student/PublicPosts";
 // import StudentResources from "@/pages/student/Resources";
 import Resources from "@/pages/student/Resources";
+import StudentPostDetail from "@/pages/student/public-posts/[id]"
+import TeacherPostDetail from "@/pages/teacher/public-posts/[id]"
+
 
 // // Chat
 // import Chat from "@/pages/chat/Chat";
@@ -127,6 +130,7 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
+ 
     {/* New route for add post page */}
     <Route
       path="/admin/posts/new"
@@ -324,6 +328,16 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
+     <Route
+      path="/teacher/posts/:id"
+      element={
+        <ProtectedRoute>
+          <RoleGuard allowedRoles={["teacher"]}>
+            <TeacherPostDetail />
+          </RoleGuard>
+        </ProtectedRoute>
+      }
+    />
     <Route
       path="/teacher/resources"
       element={
@@ -402,6 +416,16 @@ const AppRoutes = memo(() => (
         <ProtectedRoute>
           <RoleGuard allowedRoles={["student"]}>
             <StudentPublicPosts />
+          </RoleGuard>
+        </ProtectedRoute>
+      }
+    />
+         <Route
+      path="/student/posts/:id"
+      element={
+        <ProtectedRoute>
+          <RoleGuard allowedRoles={["student"]}>
+            <StudentPostDetail />
           </RoleGuard>
         </ProtectedRoute>
       }
