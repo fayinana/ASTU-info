@@ -19,6 +19,7 @@ import AdminDashboard from "@/pages/admin/admin-dashboard";
 import AdminAnnouncements from "@/pages/admin/announcements/index";
 import AdminAnnouncementView from "@/pages/admin/announcements/[id]";
 import AdminAnnouncementNew from "@/pages/admin/announcements/new";
+import TeacherPostDetail from "@/pages/teacher/public-posts/[id]"
 // import AdminPosts from "@/pages/admin/Posts";
 import AdminPostView from "@/pages/admin/posts/[id]";
 // import AdminAddPost from "@/pages/admin/posts/new"; // New import
