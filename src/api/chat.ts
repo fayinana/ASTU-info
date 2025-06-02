@@ -7,9 +7,7 @@ import {
   GetConversationsResponse,
   GetMessagesResponse,
 } from "@/types/message";
-import axios from "axios";
-// import { PaginationState } from "@/types/filters";
-axios.defaults.withCredentials = true;
+
 export const getConversations = async () => {
   try {
     const response = await apiClient.get<GetConversationsResponse>(
@@ -33,29 +31,21 @@ export const getMessages = async (conversationId: string) => {
   }
 };
 
-export const sendMessage = async (
-  conversationId: string,
-  sender: string,
-  text: string,
-  file?: any
-): Promise<{ status: string; data: { message: Message } }> => {
+export const sendMessage = async ({
+  reciverId,
+  message,
+}: {
+  reciverId: string;
+  message: string;
+}): Promise<{ status: string; data: { message: Message } }> => {
+  console.log("====================================");
+  console.log(reciverId);
+  console.log("====================================");
   try {
-    const formData = new FormData();
-    formData.append("conversationId", conversationId);
-    formData.append("sender", sender);
-    formData.append("text", text);
-
-    if (file) {
-      formData.append("file", file);
-    }
     const response = await apiClient.post<{
       status: string;
       data: { message: Message };
-    }>(`/messages`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    }>(`/messages`, { recipientId: reciverId, message });
     return response.data;
   } catch (error) {
     throw handleApiError(error);
