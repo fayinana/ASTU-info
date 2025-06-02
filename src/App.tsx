@@ -53,9 +53,6 @@ import StudentCreatePublic from "@/pages/student/public-posts/Create";
 import StudentPublicPosts from "@/pages/student/PublicPosts";
 // import StudentResources from "@/pages/student/Resources";
 import Resources from "@/pages/student/Resources";
-import StudentPostDetail from "@/pages/student/public-posts/[id]"
-import TeacherPostDetail from "@/pages/teacher/public-posts/[id]"
-
 
 // // Chat
 // import Chat from "@/pages/chat/Chat";
@@ -80,6 +77,7 @@ import AdminProfile from "./pages/admin/profile/Profile";
 import TeacherProfile from "./pages/teacher/Profile";
 import UserDetail from "./pages/admin/users/[id]";
 import UserEdit from "./pages/admin/users/UserEdit";
+import ResourceDetail from "./pages/teacher/public-posts/ResourceDetail";
 // import Chat from "./pages/Chat";
 // import StudentResources from "./components/student/StudentResources";
 // import StudentPosts from "./components/student/StudentPosts";
@@ -129,7 +127,6 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
- 
     {/* New route for add post page */}
     <Route
       path="/admin/posts/new"
@@ -208,6 +205,17 @@ const AppRoutes = memo(() => (
         <ProtectedRoute>
           <RoleGuard allowedRoles={["admin"]}>
             <AdminTeachers />
+          </RoleGuard>
+        </ProtectedRoute>
+      }
+    />
+
+    <Route
+      path="/admin/resource/:id"
+      element={
+        <ProtectedRoute>
+          <RoleGuard allowedRoles={["admin"]}>
+            <ResourceDetail />
           </RoleGuard>
         </ProtectedRoute>
       }
@@ -337,16 +345,6 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
-     <Route
-      path="/teacher/posts/:id"
-      element={
-        <ProtectedRoute>
-          <RoleGuard allowedRoles={["teacher"]}>
-            <TeacherPostDetail />
-          </RoleGuard>
-        </ProtectedRoute>
-      }
-    />
     <Route
       path="/teacher/resources"
       element={
@@ -397,7 +395,16 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
-
+    <Route
+      path="/teacher/resource/:id"
+      element={
+        <ProtectedRoute>
+          <RoleGuard allowedRoles={["teacher"]}>
+            <ResourceDetail />
+          </RoleGuard>
+        </ProtectedRoute>
+      }
+    />
     {/* Student Routes */}
     <Route
       path="/student/dashboard"
@@ -429,16 +436,6 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
-         <Route
-      path="/student/posts/:id"
-      element={
-        <ProtectedRoute>
-          <RoleGuard allowedRoles={["student"]}>
-            <StudentPostDetail />
-          </RoleGuard>
-        </ProtectedRoute>
-      }
-    />
     <Route
       path="/student/resources"
       element={
@@ -449,6 +446,17 @@ const AppRoutes = memo(() => (
         </ProtectedRoute>
       }
     />
+    <Route
+      path="/student/resource/:id"
+      element={
+        <ProtectedRoute>
+          <RoleGuard allowedRoles={["student"]}>
+            <ResourceDetail />
+          </RoleGuard>
+        </ProtectedRoute>
+      }
+    />
+
     <Route
       path="/student/profile"
       element={

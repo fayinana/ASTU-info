@@ -210,10 +210,10 @@ const TeacherResources = () => {
                   data={resources}
                   isLoading={isLoading}
                   onRowClick={(resource) =>
-                    navigate(`/teacher/resource/${resource._id}`)
+                    navigate(`/student/resource/${resource._id}`)
                   }
                   onView={(resource) =>
-                    navigate(`/teacher/resource/${resource._id}`)
+                    navigate(`/student/resource/${resource._id}`)
                   }
                   onDelete={handleDelete}
                   searchable
