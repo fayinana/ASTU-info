@@ -80,6 +80,7 @@ import AdminProfile from "./pages/admin/profile/Profile";
 import TeacherProfile from "./pages/teacher/Profile";
 import UserDetail from "./pages/admin/users/[id]";
 import UserEdit from "./pages/admin/users/UserEdit";
+import Chat from "./pages/Chat";
 // import Chat from "./pages/Chat";
 // import StudentResources from "./components/student/StudentResources";
 // import StudentPosts from "./components/student/StudentPosts";
@@ -461,14 +462,14 @@ const AppRoutes = memo(() => (
     />
 
     {/* Chat Route */}
-    {/* <Route
+    <Route
       path="/chat"
       element={
         <ProtectedRoute>
           <Chat />
         </ProtectedRoute>
       }
-    /> */}
+    />
 
     <Route path="*" element={<NotFound />} />
   </Routes>

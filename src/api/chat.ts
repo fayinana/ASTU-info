@@ -12,15 +12,11 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 export const getConversations = async () => {
   try {
-    // const response = await apiClient.get<GetConversationsResponse>(
-    //   "/messages/conversation"
-    // );
-    const res = await axios.get(
-      "https://gibi-ssvh.onrender.com/api/messages/conversation"
+    const response = await apiClient.get<GetConversationsResponse>(
+      "/messages/conversation"
     );
-    console.log(res);
 
-    return res.data;
+    return response.data;
   } catch (error) {
     throw handleApiError(error);
   }
