@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+ import { useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Paperclip, Image, Send, Smile, Mic, X } from "lucide-react";
 import { Button } from "../ui/button";
