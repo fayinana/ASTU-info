@@ -1,4 +1,4 @@
- import { useLogout } from "../hooks/useAuth"; // ✅ adjust the path if different
+  import { useLogout } from "../hooks/useAuth"; // ✅ adjust the path if different
 import {
   useState,
   createContext,
